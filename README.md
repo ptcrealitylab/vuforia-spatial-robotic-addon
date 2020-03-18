@@ -1,1 +1,1 @@
-# vuforia-spatial-robotic-addon-
+# vuforia-spatial-robotic-addon
