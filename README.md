@@ -76,9 +76,16 @@ On the left menu you will see a list with some default interfaces. You should se
 
 ![Image of VST tool](img/myRobot.jpg)
 
-### Basic Methods
+### Basic Server Methods
 
-#### __addEventListener__
+#### loadHardwareInterface
+Loads the hardware interface and gets the settings from the configuration file.
+
+```
+var settings = server.loadHardwareInterface(__dirname);
+```
+
+#### addEventListener
 You can add event listeners that will get triggered when certain things happen on the server.
 For example, you can add an event listener for when the server finishes initializing:
 
@@ -90,6 +97,34 @@ server.addEventListener("initialize", function () {
 ```
 
 Other events are: "shutdown", "reset", etc.
+
+#### enableDeveloperUI
+Set the developer UI true or false
+
+```
+server.enableDeveloperUI(true);
+```
+
+#### setTool
+
+The Vuforia Spatial Toolbox works with a pocket of tools to manipulate in AR. These tools are, effectively, the AR user interfaces for different logic behaviors.
+When working with a robot, if we want to have an AR user interface for our robot, we will need one or more tools for it.
+
+You can access the [Tool Tutorial](https://github.com/ptcrealitylab/vuforia-spatial-toolbox-documentation/blob/master/make%20tools/toolTutorial.md), and familiarize yourself better with tools.
+
+There can be infinite types of tools, and your robot may need to use a specific one that you create.
+The setTool method allows you to specify a default tool that your robot addon will have and be able to use when needed.
+
+```
+server.setTool(objectName, 'objectToolName', 'defaultToolName', __dirname);
+```
+
+#### addNode
+
+The Vuforia Spatial Toolbox tools make use of nodes in order to be programmed. This nodes can connect to eachother and are used to generate logic and behavior for the different tools and interfaces.
+To learn more about nodes, visit our [Node Tutorial](https://github.com/ptcrealitylab/vuforia-spatial-toolbox-documentation/blob/master/make%20tools/toolboxNodes.md).
+
+
 
 
 
