@@ -124,7 +124,10 @@ server.setTool(objectName, 'objectToolName', 'defaultToolName', __dirname);
 The Vuforia Spatial Toolbox tools make use of nodes in order to be programmed. This nodes can connect to eachother and are used to generate logic and behavior for the different tools and interfaces.
 To learn more about nodes, visit our [Node Tutorial](https://github.com/ptcrealitylab/vuforia-spatial-toolbox-documentation/blob/master/make%20tools/toolboxNodes.md).
 
+```
+server.addNode(objectName, toolName, nodeName, nodeType); 
+```
 
+#### moveNode
 
-
-
+Change position, rotation or scale of node.
