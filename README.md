@@ -23,6 +23,8 @@ In order to use the MIR100 robotic addon, follow the instructions on the [Kineti
 
 ## Develop new robotic addon
 
+### Get Started
+
 You may want to develop your own addon for your robot.
 Follow the next steps:
 
@@ -42,10 +44,17 @@ var settings = server.loadHardwareInterface(__dirname);
 The server variable will allow you to interface with your VST server.<br/>
 The settings variable lets you use external paramaters to configure your hardware interface.
 
-Now get the enabled variable in order to be able to active and deactivate your interface from the VST server's web frontend:
+Now get the enabled variable in order to be able to active and deactivate the code on your interface from the VST server's web frontend:
 
 ```
 exports.enabled = settings('enabled');
+
+if (exports.enabled){
+
+    // Code executed when your robotic addon is enabled
+
+}
+
 ```
 
 At this point, lets check if your robot interface is being detected by the VST server. Open the terminal, go to your server folder and run the server by typing:
@@ -66,3 +75,21 @@ Go to Manage Hardware Interfaces.
 On the left menu you will see a list with some default interfaces. You should see your new robot interface disabled in the list. You can enable or disable your robot addon by clicking ON or OFF next to it.
 
 ![Image of VST tool](img/myRobot.jpg)
+
+### Basic Methods
+
+#### __addEventListener__
+You can add event listeners that will get triggered when certain things happen on the server.
+For example, you can add an event listener for when the server finishes initializing:
+
+```
+server.addEventListener("initialize", function () {
+    console.log('VST Server has been initialized.');
+    if (exports.enabled) startHardwareInterface();
+});
+```
+
+Other events are: "shutdown", "reset", etc.
+
+
+
