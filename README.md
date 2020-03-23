@@ -1,7 +1,7 @@
 # vuforia-spatial-robotic-addon
 
 The vuforia-spatial-robotic-addon contains the hardware interfaces for robotic systems. 
-This hardware interfaces allow the connection to external hardware devices such as robots.
+These hardware interfaces allow the connection to external hardware devices such as robots.
 
 Each robotic addon contains the code needed to connect to each robot and a folder with tools.
 The tools folder has default UI interfaces for different applications. 

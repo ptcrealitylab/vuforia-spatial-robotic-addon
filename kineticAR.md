@@ -1,6 +1,6 @@
 # KineticAR interfaces
 
-This is a reference to build a [**Vuforia Spatial Toolbox** (VST)](https://forum.spatialtoolbox.vuforia.com ) KineticAR prototype using robotic interfaces for any moving robot in 2D or 3D dimensions. 
+This is a reference to build a [**Vuforia Spatial Toolbox** (VST)](https://forum.spatialtoolbox.vuforia.com ) KineticAR prototype using robotic interfaces for any moving robot in 2D or 3D. 
 This is based on our [**Kinetic AR** UX framework](https://humanrobotinteraction.org/2020/schedule/) and it works with two components:
 * **Robotic Addon Interface** [To connect to the robot hardware]
 * **KineticAR Tool** [AR UI when looking at the robot with your mobile device]
@@ -203,7 +203,7 @@ To learn how to create a configuration page for your hardware interface on the s
 
 If you are using an MIR100 robot, we already have an interface for it. Follow the next steps:
 
-Run de server:
+Run the server:
 
 ```
 node server.js
