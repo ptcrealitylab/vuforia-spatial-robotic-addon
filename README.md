@@ -22,7 +22,7 @@ You can create more robotic addons and more default tools for each one of them.
 
 ## Use the MIR100 robotic addon
 
-In order to use the MIR100 robotic addon, follow the instructions on the [KineticAR tutorial](kineticAR.md)
+In order to use the MIR100 robotic addon, follow the instructions on the [KineticAR tutorial](interfaces/MIR100/kineticAR.md)
 
 ## Develop new robotic addon
 
