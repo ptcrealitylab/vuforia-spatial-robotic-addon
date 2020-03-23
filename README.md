@@ -13,13 +13,13 @@ The main tool contained in the hardware interfaces is the motion tool. The motio
 
 This is the base structure:
 
-![Image of VST tool](img/folders.jpg)
+![Image of VST tool](resources/img/folders.jpg)
 
 You can create more robotic addons and more default tools for each one of them.
 
 ## Use the MIR100 robotic addon
 
-In order to use the MIR100 robotic addon, follow the instructions on the [KineticAR tutorial](link to kineticAR)
+In order to use the MIR100 robotic addon, follow the instructions on the [KineticAR tutorial](kineticAR.md)
 
 ## Develop new robotic addon
 
@@ -30,7 +30,7 @@ Follow the next steps:
 
 Create a new folder with your robot name. Respect the folder structure.
 
-![Image of VST tool](img/folders_yourrobot.jpg)
+![Image of VST tool](resources/img/folders_yourrobot.jpg)
 
 The minimum your robot addon needs is an index.js. Create the file and add it to your robot addon folder.
 
@@ -74,7 +74,7 @@ Go to Manage Hardware Interfaces.
 
 On the left menu you will see a list with some default interfaces. You should see your new robot interface disabled in the list. You can enable or disable your robot addon by clicking ON or OFF next to it.
 
-![Image of VST tool](img/myRobot.jpg)
+![Image of VST tool](resources/img/myRobot.jpg)
 
 ### Basic Server Methods
 
