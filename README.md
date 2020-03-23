@@ -78,6 +78,9 @@ On the left menu you will see a list with some default interfaces. You should se
 
 ### Basic Server Methods
 
+In order to connect your robotic addon to the server and to your tools, you will need to use some basic methods. 
+The following methods are the most important ones in order to develop your robotic addon. 
+
 #### loadHardwareInterface
 Loads the hardware interface and gets the settings from the configuration file.
 
@@ -119,6 +122,8 @@ The setTool method allows you to specify a default tool that your robot addon wi
 server.setTool(objectName, 'objectToolName', 'defaultToolName', __dirname);
 ```
 
+This will automatically copy your default tool, from your robotic addon tools folder, to your objectToolName folder in your realityobjects folder.
+
 #### addNode
 
 The Vuforia Spatial Toolbox tools make use of nodes in order to be programmed. This nodes can connect to eachother and are used to generate logic and behavior for the different tools and interfaces.
@@ -131,3 +136,31 @@ server.addNode(objectName, toolName, nodeName, nodeType);
 #### moveNode
 
 Change position, rotation or scale of node.
+
+```
+server.modeNode(objectName, frameName, nodeName, x, y, scale, matrix, loyalty); 
+```
+
+#### addReadListener
+
+This method allows you to add a listener to the programming node. Every time the node changes value, the callback be triggered.
+
+```
+server.addReadListener(objectName, frameName, nodeName, callBack);
+```
+
+## Authors
+
+* **[Anna Fuste](https://github.com/afustePTC)**
+
+See also the list of [contributors](https://github.com/ptcrealitylab/vuforia-spatial-robotic-addon/graphs/contributors) who participated in this project.
+
+## License
+
+This project is licensed under the MPL 2.0 License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
+* Hat tip to anyone whose code was used
+* We thank Rob Stark for being on our wall watching all of us during the development process
+
