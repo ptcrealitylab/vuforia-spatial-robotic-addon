@@ -282,4 +282,4 @@ This project is licensed under the MPL 2.0 License - see the [LICENSE.md](LICENS
 ## Acknowledgments
 
 * Hat tip to anyone whose code was used
-* We thank Rob Stark for being on our wall watching all of us during the development process
+* We thank Robb Stark for being on our wall watching all of us during the development process
