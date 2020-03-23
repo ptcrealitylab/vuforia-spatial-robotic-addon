@@ -81,7 +81,7 @@ The vuforia-spatial-edge-server interface should load on the browser.
 Here, you will find a list with all the VST Objects available.
 The first time you run the VST Server, it will be empty.
 
-![Image of Reality Server](resources/img/server.png) 
+![Image of Reality Server](../../resources/img/server.png) 
 
 ## VST Objects
 
@@ -117,7 +117,7 @@ Follow this steps on the VST Server interface on your browser:
 
 The interface will ask you to create a Vuforia Target with the name provided. 
 
-![Image of VST tool](resources/img/VuforiaTargetName.png) 
+![Image of VST tool](../../resources/img/VuforiaTargetName.png) 
 
 This name (that follows the pattern: yourRobotName_aBunchOfLettersAndNumbers) is the name you need when generating your Vuforia Target.
 
@@ -223,7 +223,7 @@ You will see a list of the hardware interfaces that are on your server. You can 
 Turn the MIR100 hardware interface on and click on the yellow gear for configuration.
 You will see the configuration parameters for the MIR100 robot as follows:
 
-![Image of VST tool](resources/img/mir_config.png) 
+![Image of VST tool](../../resources/img/mir_config.png) 
 
 Modify the parameters to match your configuration.
 Modify the IP and port so that they match the one from your robot.
@@ -267,7 +267,7 @@ If your object is not on this list, something went wrong. Check out our troubles
 If your object is on the list, point with the phone at your physical object (aka your robot).
 If your object target works, the main UI of the KineticAR tool should show up on the device.
 
-![Image of VST tool](resources/img/mir.PNG) 
+![Image of VST tool](../../resources/img/mir.PNG) 
 
 ## Authors
 
