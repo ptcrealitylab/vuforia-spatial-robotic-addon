@@ -2,8 +2,10 @@
 
 This is a reference to build a [**Vuforia Spatial Toolbox** (VST)](https://forum.spatialtoolbox.vuforia.com ) KineticAR prototype using robotic interfaces for any moving robot in 2D or 3D. 
 This is based on our [**Kinetic AR** UX framework](https://humanrobotinteraction.org/2020/schedule/) and it works with two components:
-* **Robotic Addon Interface** [To connect to the robot hardware]
-* **KineticAR Tool** [AR UI when looking at the robot with your mobile device]
+* **[Robotic Addon Interface](../../README.md)** [To connect to the robot hardware]
+* **[Motion Tool](tools/motion/motionTool.md)** [AR UI when looking at the robot with your mobile device]
+
+![Image of VST tool](../../resources/gifs/mir.gif)
 
 It allows a connection to the robot and a full spatial synchronization 
 between the robot coordinate system and the Vuforia groundplane coordinate system. 

@@ -38,8 +38,7 @@ Download or clone the [vuforia-spatial-robotic-addon](https://github.com/ptcreal
 vuforia-spatial-edge-server/addons/
 ```
 
-This folder contains all the code you need for your VST hardware interface. A hardware interface is in charge of communicating with a specific piece of hardware.
-The robotic addon interface will be in charge of talking to the robot and generating the specific nodes and logic needed for path planning.
+This folder contains all the code you need for your VST hardware interface. 
 
 ### Installing Node.js
 
@@ -168,9 +167,11 @@ To learn more about nodes, visit our [Node Tutorial](https://github.com/ptcreali
 server.addNode(objectName, toolName, nodeName, nodeType); 
 ```
 
+This method will add a node to the toolName tool.
+
 #### moveNode
 
-Change position, rotation or scale of node.
+Change position, rotation or scale of node in AR.
 
 ```
 server.modeNode(objectName, frameName, nodeName, x, y, scale, matrix, loyalty); 
@@ -178,7 +179,8 @@ server.modeNode(objectName, frameName, nodeName, x, y, scale, matrix, loyalty);
 
 #### addReadListener
 
-This method allows you to add a listener to the programming node. Every time the node changes value, the callback be triggered.
+This method allows you to add a listener to the programming node. Every time the node changes value, the callback is triggered.
+You can, for example, create a node for your robot and connect a virtual button to it in order to turn it on.
 
 ```
 server.addReadListener(objectName, frameName, nodeName, callBack);
