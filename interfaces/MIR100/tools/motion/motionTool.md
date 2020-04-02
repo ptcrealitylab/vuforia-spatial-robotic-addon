@@ -1,4 +1,10 @@
-# Motion tool
+---
+layout: doc
+title: Using the Motion Tool
+permalink: /docs/vuforia-spatial-robotic-addon/interfaces/MIR100/tools/motion/motionTool
+---
+
+## Using the Motion Tool
 
 Using the [**Vuforia Spatial Toolbox** (VST)](https://forum.spatialtoolbox.vuforia.com ), we have designed a sample motion tool that allows for path planning for a robotic addon.
 The motion tool is able to track surfaces and create paths of checkpoints for a robot to follow in AR.
@@ -7,7 +13,7 @@ In this tutorial we will explain how the motion tool works and how to develop wi
 
 ![Image of motion tool](../../../../resources/img/motionTool.PNG)
 
-## Get Started
+### Get Started
 
 We provide our sample robotic addon for the [MIR100](https://www.mobile-industrial-robots.com/en/solutions/robots/mir100/) robot.
 To setup the MIR100 robotic addon with the motion tool refer to our [KineticAR tutorial](../../kineticAR.md).
@@ -17,7 +23,7 @@ Once you have your robotic addon working with the motion tool, you will see a st
 
 You can modify the code in the MIR100 robotic addon in order to connect to your own robot.
 
-## Use the motion tool
+### Use the motion tool
 
 The motion tool is an AR interface that will allow you to visually create paths for your robot or visualize realtime motion.
 
@@ -44,14 +50,14 @@ The two buttons on the bottom left side are for
 1. resetting the robot tracking
 2. deleting all paths
 
-### Spatial Synchronization
+#### Spatial Synchronization
 
 One of the motion tool goals is to synchronize coordinate systems from the robot and the Ground Plane tracking from the mobile phone.
 The MIR100 has two laser scanner that generate a map of the environment. We can synchronize this map with our Ground Plane tracking so that the robot moves to locations specified in AR.
 
 > The motion tool has been coded specifically for the MIR100 but you can adapt it to other robotic systems.
 
-### Create a path
+#### Create a path
 
 You can create a path composed of different checkpoints in different locations.
 
@@ -60,7 +66,7 @@ You can create a path composed of different checkpoints in different locations.
 In order to add a new checkpoint, point to the floor with your mobile device and tap with your finger in the location you want your new checkpoint.
 As you tap in different spots on the floor, you will see how checkpoints appear on the ground and an arrow path is formed between them.
 
-### Checkpoint parameters
+#### Checkpoint parameters
 
 Each checkpoint has different parameters that can be modified: position, rotation, speed and height.
 
@@ -88,7 +94,7 @@ You can adjust the position more accurately with buttons that allow you to move 
 
 ![Image of Accurate position](../../../../resources/gifs/ur.gif)
 
-### Perform robotic motion
+#### Perform robotic motion
 
 In order to make your robot follow the path, you have to activate the first checkpoint.
 To do that, you can use a virtual button from the VST pocket and connect this button to the first checkpoint node.
@@ -98,17 +104,17 @@ When a checkpoint activates (meaning that it has received a value of 1), the rob
 Once the robot has reached that position, the next checkpoint in the path (if there is one), will get activated, and this will continue until the last checkpoint is reached.
 
 
-## Authors
+### Authors
 
 * **[Anna Fuste](https://github.com/afustePTC)**
 
 See also the list of [contributors](https://github.com/ptcrealitylab/vuforia-spatial-robotic-addon/graphs/contributors) who participated in this project.
 
-## License
+### License
 
 This project is licensed under the MPL 2.0 License - see the [LICENSE](../../../../LICENSE) file for details
 
-## Acknowledgments
+### Acknowledgments
 
 * Hat tip to anyone whose code was used
 * We thank Robb Stark for being on our wall watching all of us during the development process

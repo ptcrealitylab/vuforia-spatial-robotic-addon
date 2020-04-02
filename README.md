@@ -1,4 +1,10 @@
-# vuforia-spatial-robotic-addon
+---
+layout: doc
+title: Robotic Add-on
+permalink: /docs/vuforia-spatial-robotic-addon
+---
+
+## Vuforia Spatial Robotic Add-on
 
 The vuforia-spatial-robotic-addon contains the hardware interfaces for robotic systems in the [Vuforia Spatial Toolbox server](https://github.com/ptcrealitylab/vuforia-spatial-edge-server). 
 These hardware interfaces allow the connection to external hardware devices such as robots that can be controlled in Augmented Reality, using VST tools.
@@ -20,13 +26,13 @@ You can create more robotic addons and more default tools for each one of them.
 
 
 
-## Use the MIR100 robotic addon
+### Use the MIR100 robotic addon
 
 In order to use the MIR100 robotic addon, follow the instructions on the [KineticAR tutorial](interfaces/MIR100/kineticAR.md)
 
-## Develop new robotic addon
+### Develop new robotic addon
 
-### Get Started
+#### Get Started
 
 You may want to develop your own addon for your robot. Follow the next steps:
 
@@ -40,7 +46,7 @@ vuforia-spatial-edge-server/addons/
 
 This folder contains all the code you need for your VST hardware interface. 
 
-### Installing Node.js
+#### Installing Node.js
 
 In order to run the server, you will need Node.js installed on your computer. 
 Install [node.js](https://nodejs.org).<br />
@@ -61,7 +67,7 @@ npm install
 
 This will install all the Node.js dependencies needed in your robotic addon folder.
 
-### Creating your robot addon
+#### Creating your robot addon
 
 Create a new folder with your robot name. Respect the folder structure.
 
@@ -186,17 +192,17 @@ You can, for example, create a node for your robot and connect a virtual button 
 server.addReadListener(objectName, frameName, nodeName, callBack);
 ```
 
-## Authors
+### Authors
 
 * **[Anna Fuste](https://github.com/afustePTC)**
 
 See also the list of [contributors](https://github.com/ptcrealitylab/vuforia-spatial-robotic-addon/graphs/contributors) who participated in this project.
 
-## License
+### License
 
 This project is licensed under the MPL 2.0 License - see the [LICENSE](LICENSE) file for details
 
-## Acknowledgments
+### Acknowledgments
 
 * Hat tip to anyone whose code was used
 * We thank Robb Stark for being on our wall watching all of us during the development process
