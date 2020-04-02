@@ -1,4 +1,10 @@
-# KineticAR interfaces
+---
+layout: doc
+title: KineticAR Prototyping
+permalink: /docs/vuforia-spatial-robotic-addon/interfaces/MIR100/kineticAR
+---
+
+## KineticAR Interfaces
 
 This is a reference to build a [**Vuforia Spatial Toolbox** (VST)](https://forum.spatialtoolbox.vuforia.com ) KineticAR prototype using robotic interfaces for any moving robot in 2D or 3D. 
 This is based on our [**Kinetic AR** UX framework](https://humanrobotinteraction.org/2020/schedule/) and it works with two components:
@@ -11,12 +17,12 @@ It allows a connection to the robot and a full spatial synchronization
 between the robot coordinate system and the Vuforia groundplane coordinate system. 
 It also allows for path planning and motion visualization in AR in real-time.
 
-## Getting Started
+### Getting Started
 
 These instructions will explain how to setup the Kinetic AR robotic addons and tools. 
 You will have to clone or download the code for the VST repositories as explained later.
 
-### Prerequisites
+#### Prerequisites
 
 The robot you want to use needs a remote connection and you need to understand the communication protocols involved to:
 
@@ -31,7 +37,7 @@ You will need to adapt the code to be able to communicate with your specific har
 
 You will also need the object target or image target to identify the robot with the mobile device [Later explained]
 
-## Download code
+### Download code
 
 1. Download the [vuforia-spatial-edge-server](https://github.com/ptcrealitylab/vuforia-spatial-edge-server) code and place it in your Development folder on your computer.
 
@@ -44,7 +50,7 @@ vuforia-spatial-edge-server/addons/
 This folder contains all the code you need for your VST hardware interface. A hardware interface is in charge of communicating with a specific piece of hardware.
 The robotic addon interface will be in charge of talking to the robot and generating the specific nodes and logic needed for path planning.
 
-## Installing Node.js
+### Installing Node.js
 
 In order to run the server, you will need Node.js installed on your computer. 
 Install [node.js](https://nodejs.org).<br />
@@ -65,7 +71,7 @@ npm install
 
 This will install all the Node.js dependencies needed in your robotic addon folder.
 
-## Running your VST server
+### Running your VST server
 
 Now, go back to your root folder (vuforia-spatial-edge-server/) and you can run the server as follows:
 
@@ -85,7 +91,7 @@ The first time you run the VST Server, it will be empty.
 
 ![Image of Reality Server](../../resources/img/server.png) 
 
-## VST Objects
+### VST Objects
 
 In your computer, the VST Objects are stored in the following folder:
 
@@ -95,13 +101,13 @@ Documents/realityobjects
 
 This folder gets generated the first time you run the Reality Server.
 
-## KineticAR Object and Tool
+### KineticAR Object and Tool
 
 You will need a virtual object that will represent your physical object (your robot) and a KineticAR tool attached to it. 
 > An object is a reference to your world physical object (aka your robot). 
 The tool is a piece of AR content that will be attached to your physical object or physical surroundings [it is, essentially, the AR user interface].<br /> 
 
-### Creating trackable object
+#### Creating trackable object
 
 Your object will need a Vuforia object target in order to be identified and tracked.
 You will have to generate this object target from the Vuforia Developer Portal. But first, you need to know the name of your target. Do the following:
@@ -129,7 +135,7 @@ Go to the Target Manager and add a new target. When prompted, add the name you g
 Download the target when processed. 
 When prompted to select a development platform, select the option Android Studio, Xcode or Visual Studio.
 
-### Creating a VST tool through the VST server
+#### Creating a VST tool through the VST server
 
 Once you have downloaded your object/image target follow this steps on the VST Server interface on your browser:
 
@@ -149,7 +155,7 @@ Here, you can develop your own tools to be used when tracking your object.
 
 For our example on KineticAR, the system will copy the tool from the robotic addon interface. So, on to that:
 
-### Initializing your robotic addon interface
+#### Initializing your robotic addon interface
 
 If you want to use the existing robotic addons (MIR, FANUC, UR) with the default 'kineticAR' tool, skip to Testing.
 If you want to create a new robotic addon, continue reading.
@@ -198,7 +204,7 @@ This second command will trigger the generation of the bundle.js file every time
 
 
 
-## Configure robot
+### Configure robot
 
 The hardware interface for your robot, can optionally have configuration settings that you can change through the server browser interface.
 To learn how to create a configuration page for your hardware interface on the server from scratch, read the [Configurable Hardware Interface readme file](https://github.com/ptcrealitylab/vuforia-spatial-toolbox-documentation/blob/master/interfaceWithHardware/configurableSettingsForInterfaces.md).
@@ -234,7 +240,7 @@ Finally, set enableMIRConnection to true, so that the software tries to connect 
 
 Once this is all setup, stop your server. Go to the next section: Testing.
 
-## Testing
+### Testing
 
 At this point, you have everything setup and you should test to make sure that everything works together.
 Follow these steps to ensure that your code runs properly.
@@ -271,17 +277,17 @@ If your object target works, the main UI of the KineticAR tool should show up on
 
 ![Image of VST tool](../../resources/img/mir.PNG) 
 
-## Authors
+### Authors
 
 * **[Anna Fuste](https://github.com/afustePTC)**
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
-## License
+### License
 
 This project is licensed under the MPL 2.0 License - see the [LICENSE](../../LICENSE) file for details
 
-## Acknowledgments
+### Acknowledgments
 
 * Hat tip to anyone whose code was used
 * We thank Robb Stark for being on our wall watching all of us during the development process
