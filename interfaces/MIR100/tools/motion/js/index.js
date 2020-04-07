@@ -26,7 +26,7 @@ function clearPath() {
     if (arScene.motionViz !== null) arScene.motionViz.clearMotionLine();
 
     // Call server to delete nodes
-    realityInterface.writePublicData("kineticNode4", "ClearPath", true);
+    spatialInterface.writePublicData("kineticNode4", "ClearPath", true);
 
     pushPathsDataToServer();
 
@@ -61,7 +61,7 @@ function sendRobotPosition(){
         "robotInitPosition" : arScene.lastPosition,
         "robotInitDirection" : arScene.lastDirection
     };
-    realityInterface.writePublicData("kineticNode3", "ARstatus", arData);
+    spatialInterface.writePublicData("kineticNode3", "ARstatus", arData);
     mainUI.robotTracked();
 }
 document.body.appendChild( arScene.renderer.domElement );
@@ -99,41 +99,41 @@ mainUI.on('positionEdit', function (data) {
 document.body.appendChild( checkpointUI.domElement );
 
 /**
-* realityInterface connects to the server API
+* spatialInterface connects to the server API
 */
-const realityInterface = new RealityInterface();
+const spatialInterface = new SpatialInterface();
 
-realityInterface.onRealityInterfaceLoaded(function() {
-    realityInterface.setFullScreenOn();
-    realityInterface.setStickyFullScreenOn();
-    realityInterface.subscribeToMatrix();
-    realityInterface.addMatrixListener(renderRobotCallback);
-    realityInterface.addGroundPlaneMatrixListener(groundPlaneCallback);
-    realityInterface.writePublicData("kineticNode4", "ClearPath", true);
-    realityInterface.setVisibilityDistance(100);
+spatialInterface.onRealityInterfaceLoaded(function() {
+    spatialInterface.setFullScreenOn();
+    spatialInterface.setStickyFullScreenOn();
+    spatialInterface.subscribeToMatrix();
+    spatialInterface.addMatrixListener(renderRobotCallback);
+    spatialInterface.addGroundPlaneMatrixListener(groundPlaneCallback);
+    spatialInterface.writePublicData("kineticNode4", "ClearPath", true);
+    spatialInterface.setVisibilityDistance(100);
 
-    realityInterface.getScreenDimensions(function(width, height) {      // Resize to screen dimensions
+    spatialInterface.getScreenDimensions(function(width, height) {      // Resize to screen dimensions
         document.body.width = width + 'px';
         document.body.height = height + 'px';
         arScene.rendererWidth = width;
         arScene.rendererHeight = height;
         arScene.renderer.setSize( arScene.rendererWidth, arScene.rendererHeight );
-        realityInterface.changeFrameSize(width, height);
+        spatialInterface.changeFrameSize(width, height);
     });
     
-    realityInterface.setMoveDelay(-1);  // Keep pointer move active after some time of pointer down
+    spatialInterface.setMoveDelay(-1);  // Keep pointer move active after some time of pointer down
 
-    realityInterface.addReadPublicDataListener("kineticNode1", "CheckpointStopped", function (data){
+    spatialInterface.addReadPublicDataListener("kineticNode1", "CheckpointStopped", function (data){
         console.log('Checkpoint STOPPED: ', data);
         if (arScene !== undefined) arScene.checkpointReached(data);
     });
 
-    realityInterface.addReadPublicDataListener("kineticNode1", "CheckpointTriggered", function (data){
+    spatialInterface.addReadPublicDataListener("kineticNode1", "CheckpointTriggered", function (data){
         console.log('Checkpoint TRIGGERED: ', data);
         if (arScene !== undefined) arScene.checkpointTriggered(data);
     });
     
-    realityInterface.addReadPublicDataListener("kineticNode1", "ARposition", function (data){
+    spatialInterface.addReadPublicDataListener("kineticNode1", "ARposition", function (data){
         if (arScene !== undefined) arScene.moveDummyRobot(data);    // Position robot/occlusion dummy
     });
     
@@ -233,7 +233,7 @@ function pushPathsDataToServer(){
     arScene.paths.forEach(path => { pathsData.push(path.pathData); });
 
     //console.log('push data to server: ', pathsData);
-    realityInterface.writePublicData("kineticNode2", "pathData", pathsData);
+    spatialInterface.writePublicData("kineticNode2", "pathData", pathsData);
 }
 
 const loop = animitter(update);     // creates a loop 60fps using window.requestAnimationFrame
