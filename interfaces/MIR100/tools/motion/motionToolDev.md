@@ -54,7 +54,7 @@ const spatialInterface = new SpatialInterface();
 We subscribe to the following event in order to initialize our tool.
 
 ```js
-realityInterface.onRealityInterfaceLoaded(function() {
+spatialInterface.onRealityInterfaceLoaded(function() {
     // Initialization code
 });
 ```
@@ -69,8 +69,8 @@ function pushPathsDataToServer(){
     let pathsData = [];
     arScene.paths.forEach(path => { pathsData.push(path.pathData); });
 
-    // realityInterface.writePublicData(nodeName, dataName, data);
-    realityInterface.writePublicData("kineticNode2", "pathData", pathsData);
+    // spatialInterface.writePublicData(nodeName, dataName, data);
+    spatialInterface.writePublicData("kineticNode2", "pathData", pathsData);
 }
 ```
 
@@ -87,21 +87,21 @@ The Update method is called at 60fps.
 const loop = animitter(update);
 ```
 
-## Reality Interface initialization
+## Spatial Interface initialization
 
 The following methods are called in the onRealityInterfaceLoaded callback, in order to configure our tool:
 
 | Method        | Explanation  |
 |:------------- |:-------------|
-| realityInterface.setFullScreenOn();      | Set tool to full screen |
-| realityInterface.setStickyFullScreenOn();      | Set tool to sticky. It won't disappear if we loose tracking of our object|
-| realityInterface.subscribeToMatrix(); | Subscribe to data from matrices from objects and groundplane      |
-| realityInterface.addMatrixListener(renderRobotCallback); | Callback for when we receive matrix data from object tracked      |
-| realityInterface.addGroundPlaneMatrixListener(groundPlaneCallback); | Callback for when we receive matrix data from [Vuforia Ground Plane](https://library.vuforia.com/articles/Training/ground-plane-guide.html)     |
-| realityInterface.setVisibilityDistance(100); | We extend the visibility distance to 100 so that the tool does not disappear when getting further      |
-| realityInterface.getScreenDimensions(...); | Resize to screen dimensions      |
-| realityInterface.setMoveDelay(-1); | Keep pointer move active after some time of pointer down      |
-| realityInterface.addReadPublicDataListener(...); | This will allow us to add a listener for data from the edge server  |
+| spatialInterface.setFullScreenOn();      | Set tool to full screen |
+| spatialInterface.setStickyFullScreenOn();      | Set tool to sticky. It won't disappear if we loose tracking of our object|
+| spatialInterface.subscribeToMatrix(); | Subscribe to data from matrices from objects and groundplane      |
+| spatialInterface.addMatrixListener(renderRobotCallback); | Callback for when we receive matrix data from object tracked      |
+| spatialInterface.addGroundPlaneMatrixListener(groundPlaneCallback); | Callback for when we receive matrix data from [Vuforia Ground Plane](https://library.vuforia.com/articles/Training/ground-plane-guide.html)     |
+| spatialInterface.setVisibilityDistance(100); | We extend the visibility distance to 100 so that the tool does not disappear when getting further      |
+| spatialInterface.getScreenDimensions(...); | Resize to screen dimensions      |
+| spatialInterface.setMoveDelay(-1); | Keep pointer move active after some time of pointer down      |
+| spatialInterface.addReadPublicDataListener(...); | This will allow us to add a listener for data from the edge server  |
 
 ## Important things to consider
 
