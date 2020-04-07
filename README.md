@@ -158,7 +158,7 @@ The setTool method allows you to specify a default tool that your robot addon wi
 server.setTool(objectName, 'objectToolName', 'defaultToolName', __dirname);
 ```
 
-This will automatically copy your default tool, from your robotic addon tools folder, to your objectToolName folder in your realityobjects folder.
+This will automatically copy your default tool, from your robotic addon tools folder, to your objectToolName folder in your spatialToolbox folder.
 
 #### addNode
 
