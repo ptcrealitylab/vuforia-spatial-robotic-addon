@@ -15,7 +15,7 @@ window.THREE = THREE;
  * @author Anna Fuste
  * @required eventemitter3, three, three-fbx-loader, axisdummy.js, robotdummy.js, utils.js, path.js, motionvisualization.js
  */
-export class KineticARView extends EventEmitter{
+export class ARScene extends EventEmitter{
     constructor(){
 
         super();

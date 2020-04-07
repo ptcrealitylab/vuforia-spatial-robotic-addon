@@ -873,7 +873,7 @@ function clearPath() {
 document.body.appendChild(mainUI.domElement);
 
 /**
-* KineticARView contains all information, assets and logic for the threejs scene
+* ARScene contains all information, assets and logic for the threejs scene
 */
 var kineticARView = new _kineticARView.KineticARView();
 kineticARView.on('robotAnchored', sendRobotPosition); // Subscribe to send robot position to server
