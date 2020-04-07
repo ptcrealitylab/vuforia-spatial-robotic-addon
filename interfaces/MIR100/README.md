@@ -22,6 +22,10 @@ It also allows for path planning and motion visualization in AR in real-time.
 These instructions will explain how to setup the Kinetic AR robotic addons and tools. 
 You will have to clone or download the code for the VST repositories as explained later.
 
+This tutorial is based on the interface built for an [MIR100](https://www.mobile-industrial-robots.com/en/solutions/robots/mir100/) Automated Guided Vehicle. But can be adapted to any other robot.
+The MIR example makes use of a Rest API and WebSockets in order to communicate with the AGV. 
+You will need to adapt the code to be able to communicate with your specific hardware.
+
 #### Prerequisites
 
 The robot you want to use needs a remote connection and you need to understand the communication protocols involved to:
@@ -29,10 +33,6 @@ The robot you want to use needs a remote connection and you need to understand t
 * Get the robot status (current position/rotation and if it is moving or not)
 * Send a move command to the robot in order to send it to a final position and rotation
 * Steer the robot in realtime [optional]
-
-This tutorial is based on the interface built for an [MIR100](https://www.mobile-industrial-robots.com/en/solutions/robots/mir100/) Automated Guided Vehicle. But can be adapted to any other robot.
-The MIR example makes use of a Rest API and WebSockets in order to communicate with the AGV. 
-You will need to adapt the code to be able to communicate with your specific hardware.
  
 
 You will also need the object target or image target to identify the robot with the mobile device [Later explained]
@@ -157,7 +157,7 @@ For our example on KineticAR, the system will copy the tool from the robotic add
 
 #### Initializing your robotic addon interface
 
-If you want to use the existing robotic addons (MIR, FANUC, UR) with the default 'kineticAR' tool, skip to Testing.
+If you want to use the existing robotic addons (MIR100) with the default 'kineticAR' tool, skip to Testing.
 If you want to create a new robotic addon, continue reading.
 
 In order to create your own robotic addon interface, access the following folder:
