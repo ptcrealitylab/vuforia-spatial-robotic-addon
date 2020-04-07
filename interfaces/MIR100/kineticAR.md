@@ -96,7 +96,7 @@ The first time you run the VST Server, it will be empty.
 In your computer, the VST Objects are stored in the following folder:
 
 ```
-Documents/realityobjects
+Documents/spatialToolbox
 ```
 
 This folder gets generated the first time you run the Reality Server.
@@ -143,10 +143,10 @@ On the 'Add Target' interface:
 * Drop zip file or separate files (dat, xml and jpg) to the drop zone. The [OFF] button should turn to [ON]
 * Click on 'Add Frame'. Give this frame the following name: 'kineticAR'
 
-At this point, if you go to your file system and navigate to the realityobjects folder, you should see that a folder has been created for your object and your tool.
+At this point, if you go to your file system and navigate to the spatialToolbox folder, you should see that a folder has been created for your object and your tool.
 
 ```
-Documents/realityobjects/yourObjectName/kineticAR
+Documents/spatialToolbox/yourObjectName/kineticAR
 ```
 
 In this frame folder you will host the code that will generate the KineticAR tool once you detect your robot.
