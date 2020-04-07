@@ -1,6 +1,6 @@
 import animitter from 'animitter';  // a library for handling animation-loops
 import {MainUI} from "./mainUI";
-import {KineticARView} from "./kineticARView";
+import {ARScene} from "./ARScene";
 import {CheckpointUI} from "./checkpointUI";
 
 /**
@@ -13,128 +13,128 @@ mainUI.on('closePath', closePathCallback);
 mainUI.on('closeAction', closeActionCallback);
 
 /**
-* closeActionCallback() resets the checkpoint mode and closes all editing modes
-*/
-function closeActionCallback(){
-    kineticARView.activateCheckpointMode(0);
-    mainUI.hideCloseActionButton();
-    checkpointUI.resetMode();
-    mainUI.hideCheckpointPositionMenu();
-}
+ * sets isRobotAnchorSet to false so that
+ */
+function resetTracking(){ if (arScene !== undefined) arScene.isRobotAnchorSet = false; }
 
-/**
-* sets isRobotAnchorSet to false so that
-*/
-function resetTracking(){
-    if (kineticARView !== undefined) kineticARView.isRobotAnchorSet = false;
-}
-
-function closePathCallback(){ kineticARView.currentPath.closePath(); }
 function clearPath() {
 
     closeActionCallback();
 
     // Clear paths and send request to server to remove nodes and delete all checkpoints from path
-    kineticARView.paths.forEach(path => { path.clear(); });
-    if (kineticARView.motionViz !== null) kineticARView.motionViz.clearMotionLine();
+    arScene.paths.forEach(path => { path.clear(); });
+    if (arScene.motionViz !== null) arScene.motionViz.clearMotionLine();
 
     // Call server to delete nodes
-    realityInterface.writePublicData("kineticNode4", "ClearPath", true);
+    spatialInterface.writePublicData("kineticNode4", "ClearPath", true);
 
     pushPathsDataToServer();
 
 }
 
+/**
+* closeActionCallback() resets the checkpoint mode and closes all editing modes
+*/
+function closeActionCallback(){
+    arScene.activateCheckpointMode(0);
+    mainUI.hideCloseActionButton();
+    checkpointUI.resetMode();
+    mainUI.hideCheckpointPositionMenu();
+}
+
+function closePathCallback(){ arScene.currentPath.closePath(); }
+
 document.body.appendChild( mainUI.domElement );
 
 /**
-* KineticARView contains all information, assets and logic for the threejs scene
+* ARScene contains all information, assets and logic for the threejs scene
 */
-const kineticARView = new KineticARView();
-kineticARView.on('robotAnchored', sendRobotPosition);                                                             // Subscribe to send robot position to server
-kineticARView.on('surfaceTracked', function surfaceTracked(){ mainUI.surfaceTracked(); });                        // Subscribe to give feedback on surface tracked in mainUI
-kineticARView.clearRenderInDevices();
+const arScene = new ARScene();
+
+arScene.on('robotAnchored', sendRobotPosition);                                                             // Subscribe to send robot position to server
+arScene.on('surfaceTracked', function surfaceTracked(){ mainUI.surfaceTracked(); });                        // Subscribe to give feedback on surface tracked in mainUI
+arScene.clearRenderInDevices();
 
 // Send robot position and direction in AR to server
 function sendRobotPosition(){
     let arData = {
-        "robotInitPosition" : kineticARView.lastPosition,
-        "robotInitDirection" : kineticARView.lastDirection
+        "robotInitPosition" : arScene.lastPosition,
+        "robotInitDirection" : arScene.lastDirection
     };
-    realityInterface.writePublicData("kineticNode3", "ARstatus", arData);
+    spatialInterface.writePublicData("kineticNode3", "ARstatus", arData);
     mainUI.robotTracked();
 }
-document.body.appendChild( kineticARView.renderer.domElement );
+document.body.appendChild( arScene.renderer.domElement );
 
 /**
 * CheckpointUI contains all information, assets and logic for the dynamic UI for each checkpoint
 */
 const checkpointUI = new CheckpointUI();
 checkpointUI.on('rotate', function(){
-    kineticARView.activateCheckpointMode(1);
+    arScene.activateCheckpointMode(1);
     mainUI.showCloseActionButton();
 }, false);
 checkpointUI.on('speed', function(){
-    kineticARView.activateCheckpointMode(2);
+    arScene.activateCheckpointMode(2);
     mainUI.showCloseActionButton();
 }, false);
 checkpointUI.on('height', function(){
-    kineticARView.activateCheckpointMode(3);
+    arScene.activateCheckpointMode(3);
     mainUI.showCloseActionButton();
 }, false);
 
 checkpointUI.on('position', function(){
-    kineticARView.activateCheckpointMode(4);
+    arScene.activateCheckpointMode(4);
     mainUI.showCheckpointPositionMenu();
-    kineticARView.showCheckpointArrows();
+    arScene.showCheckpointArrows();
     mainUI.showCloseActionButton();
 }, false);
 
 mainUI.on('positionEdit', function (data) {
-    kineticARView.adjustPosition(data);
-    kineticARView.currentPath.updatePathData();
+    arScene.adjustPosition(data);
+    arScene.currentPath.updatePathData();
     pushPathsDataToServer();
 });
 
 document.body.appendChild( checkpointUI.domElement );
 
 /**
-* realityInterface connects to the server API
+* spatialInterface connects to the server API
 */
-const realityInterface = new RealityInterface();
+const spatialInterface = new SpatialInterface();
 
-realityInterface.onRealityInterfaceLoaded(function() {
-    realityInterface.setFullScreenOn();
-    realityInterface.setStickyFullScreenOn();
-    realityInterface.subscribeToMatrix();
-    realityInterface.addMatrixListener(renderRobotCallback);
-    realityInterface.addGroundPlaneMatrixListener(groundPlaneCallback);
-    realityInterface.writePublicData("kineticNode4", "ClearPath", true);
-    realityInterface.setVisibilityDistance(100);
+spatialInterface.onRealityInterfaceLoaded(function() {
+    spatialInterface.setFullScreenOn();
+    spatialInterface.setStickyFullScreenOn();
+    spatialInterface.subscribeToMatrix();
+    spatialInterface.addMatrixListener(renderRobotCallback);
+    spatialInterface.addGroundPlaneMatrixListener(groundPlaneCallback);
+    spatialInterface.writePublicData("kineticNode4", "ClearPath", true);
+    spatialInterface.setVisibilityDistance(100);
 
-    realityInterface.getScreenDimensions(function(width, height) {      // Resize to screen dimensions
+    spatialInterface.getScreenDimensions(function(width, height) {      // Resize to screen dimensions
         document.body.width = width + 'px';
         document.body.height = height + 'px';
-        kineticARView.rendererWidth = width;
-        kineticARView.rendererHeight = height;
-        kineticARView.renderer.setSize( kineticARView.rendererWidth, kineticARView.rendererHeight );
-        realityInterface.changeFrameSize(width, height);
+        arScene.rendererWidth = width;
+        arScene.rendererHeight = height;
+        arScene.renderer.setSize( arScene.rendererWidth, arScene.rendererHeight );
+        spatialInterface.changeFrameSize(width, height);
     });
     
-    realityInterface.setMoveDelay(-1);  // Keep pointer move active after some time of pointer down
+    spatialInterface.setMoveDelay(-1);  // Keep pointer move active after some time of pointer down
 
-    realityInterface.addReadPublicDataListener("kineticNode1", "CheckpointStopped", function (data){
+    spatialInterface.addReadPublicDataListener("kineticNode1", "CheckpointStopped", function (data){
         console.log('Checkpoint STOPPED: ', data);
-        if (kineticARView !== undefined) kineticARView.checkpointReached(data);
+        if (arScene !== undefined) arScene.checkpointReached(data);
     });
 
-    realityInterface.addReadPublicDataListener("kineticNode1", "CheckpointTriggered", function (data){
+    spatialInterface.addReadPublicDataListener("kineticNode1", "CheckpointTriggered", function (data){
         console.log('Checkpoint TRIGGERED: ', data);
-        if (kineticARView !== undefined) kineticARView.checkpointTriggered(data);
+        if (arScene !== undefined) arScene.checkpointTriggered(data);
     });
     
-    realityInterface.addReadPublicDataListener("kineticNode1", "ARposition", function (data){
-        if (kineticARView !== undefined) kineticARView.moveDummyRobot(data);    // Position robot/occlusion dummy
+    spatialInterface.addReadPublicDataListener("kineticNode1", "ARposition", function (data){
+        if (arScene !== undefined) arScene.moveDummyRobot(data);    // Position robot/occlusion dummy
     });
     
     /**
@@ -142,17 +142,17 @@ realityInterface.onRealityInterfaceLoaded(function() {
      * This will update the visualization of the paths and checkpoints in external devices.
      */
     //realityInterface.addReadPublicDataListener("kineticNode2", "pathData", function (data) {
-    //    if (kineticARView !== undefined) kineticARView.updateDevices(data);
+    //    if (arScene !== undefined) arScene.updateDevices(data);
     //});
 });
 
 function groundPlaneCallback(groundPlaneMatrix, projectionMatrix) {
-    if (kineticARView !== undefined) kineticARView.setGroundPlaneMatrix(groundPlaneMatrix, projectionMatrix);
+    if (arScene !== undefined) arScene.setGroundPlaneMatrix(groundPlaneMatrix, projectionMatrix);
 }
 
 function renderRobotCallback(modelviewmatrix, projectionMatrix) {
-    if (kineticARView !== undefined){
-        kineticARView.renderRobot(modelviewmatrix, projectionMatrix);
+    if (arScene !== undefined){
+        arScene.renderRobot(modelviewmatrix, projectionMatrix);
     }
 }
 
@@ -162,31 +162,31 @@ function pointerDown(eventData) {
         
         if (checkpointUI.checkpointMode === 4){ // If the adjustment position menu is open, close it
             mainUI.hideCheckpointPositionMenu();
-            kineticARView.hideCheckpointArrows();
-            kineticARView.currentPath.selectedCheckpoint.deselectCheckpoint();
-            kineticARView.currentPath.selectedCheckpoint = null;
+            arScene.hideCheckpointArrows();
+            arScene.currentPath.selectedCheckpoint.deselectCheckpoint();
+            arScene.currentPath.selectedCheckpoint = null;
         }
 
-        let newRay = kineticARView.getRayFromMouse(eventData);
-        let newPositionOnGroundPlane = kineticARView.computeGroundPlaneIntersection(newRay);            // Get Intersection with Ground Plane
+        let newRay = arScene.getRayFromMouse(eventData);
+        let newPositionOnGroundPlane = arScene.computeGroundPlaneIntersection(newRay);            // Get Intersection with Ground Plane
 
-        if (kineticARView.currentPath !== null && kineticARView.currentPath.isActive()){
+        if (arScene.currentPath !== null && arScene.currentPath.isActive()){
 
-            kineticARView.currentPath.onGroundPlaneIntersection(newRay, newPositionOnGroundPlane, checkpointUI.checkpointMode);  // Deal with tap on Ground Plane in current path
+            arScene.currentPath.onGroundPlaneIntersection(newRay, newPositionOnGroundPlane, checkpointUI.checkpointMode);  // Deal with tap on Ground Plane in current path
 
         } else {
 
-            kineticARView.createNewPath(newPositionOnGroundPlane);                                      // Create new path with first checkpoint
+            arScene.createNewPath(newPositionOnGroundPlane);                                      // Create new path with first checkpoint
 
             pushPathsDataToServer();
 
-            kineticARView.currentPath.newCheckpoint(newPositionOnGroundPlane);    // Create first checkpoint
-            kineticARView.currentPath.updateHeightLinesAndFloorMarks();
-            kineticARView.currentPath.on('checkpoint_menu', checkpointUI.activateCheckpointMenu);       // Subscribe to activate checkpoint menu
+            arScene.currentPath.newCheckpoint(newPositionOnGroundPlane);    // Create first checkpoint
+            arScene.currentPath.updateHeightLinesAndFloorMarks();
+            arScene.currentPath.on('checkpoint_menu', checkpointUI.activateCheckpointMenu);       // Subscribe to activate checkpoint menu
 
-            kineticARView.currentPath.on('reset_mode', function () {
+            arScene.currentPath.on('reset_mode', function () {
                 checkpointUI.resetMode();
-                kineticARView.closeEdit();
+                arScene.closeEdit();
                 mainUI.hideCloseActionButton();
             });
         }
@@ -200,29 +200,29 @@ function pointerMove(eventData){
 
         if (!checkpointUI.isCheckpointMenuVisible()){
 
-            let newRay = kineticARView.getRayFromMouse(eventData);
-            let newPosition = kineticARView.computeGroundPlaneIntersection(newRay);
+            let newRay = arScene.getRayFromMouse(eventData);
+            let newPosition = arScene.computeGroundPlaneIntersection(newRay);
 
-            if (checkpointUI.checkpointMode === 0 && kineticARView.currentPath !== null){
+            if (checkpointUI.checkpointMode === 0 && arScene.currentPath !== null){
 
-                kineticARView.moveSelectedCheckpoint(newPosition);
-                kineticARView.currentPath.closeReset();
+                arScene.moveSelectedCheckpoint(newPosition);
+                arScene.currentPath.closeReset();
 
             } else {
-                kineticARView.editCheckpoint(eventData, newPosition, checkpointUI.checkpointMode);
+                arScene.editCheckpoint(eventData, newPosition, checkpointUI.checkpointMode);
             }
         }
     }
 
-    if (kineticARView.currentPath !== null) kineticARView.currentPath.updatePathData();
+    if (arScene.currentPath !== null) arScene.currentPath.updatePathData();
 }
 
 function pointerUp( eventData ) {
 
     if (!mainUI.buttonTouch){
         checkpointUI.deactivateCheckpointMenu();
-        kineticARView.closeEdit();
-        kineticARView.currentPath.closeReset();
+        arScene.closeEdit();
+        arScene.currentPath.closeReset();
 
         pushPathsDataToServer();
     }
@@ -230,10 +230,10 @@ function pointerUp( eventData ) {
 
 function pushPathsDataToServer(){
     let pathsData = [];
-    kineticARView.paths.forEach(path => { pathsData.push(path.pathData); });
+    arScene.paths.forEach(path => { pathsData.push(path.pathData); });
 
     //console.log('push data to server: ', pathsData);
-    realityInterface.writePublicData("kineticNode2", "pathData", pathsData);
+    spatialInterface.writePublicData("kineticNode2", "pathData", pathsData);
 }
 
 const loop = animitter(update);     // creates a loop 60fps using window.requestAnimationFrame
@@ -248,14 +248,14 @@ function update(deltaTime, elapsedTime, frameCount) {
 
     //annie.update(deltaTime);
 
-    kineticARView.paths.forEach(path => {
+    arScene.paths.forEach(path => {
 
-        path.checkpointsLookAt(kineticARView.camera.position);                  // Make all checkpoints look at camera
+        path.checkpointsLookAt(arScene.camera.position);                  // Make all checkpoints look at camera
         path.update(deltaTime, elapsedTime, frameCount);
     });
 
     if (checkpointUI.isCheckpointMenuVisible()){                                // Checkpoint Menu selection
-        checkpointUI.showCheckpointMenu(kineticARView.currentPath, kineticARView.camera, kineticARView.renderer);
+        checkpointUI.showCheckpointMenu(arScene.currentPath, arScene.camera, arScene.renderer);
     } else {
         checkpointUI.resetCheckpointMenu();
     }
