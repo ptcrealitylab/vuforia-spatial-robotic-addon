@@ -23,7 +23,12 @@ Once you have your robotic addon working with the motion tool, you will see a st
 
 You can modify the code in the MIR100 robotic addon in order to connect to your own robot.
 
-### Use the motion tool
+## Dive deeper
+
+This readme file will explain how the interface for the Motion Tool works in the VST application. 
+If you want to dive deeper into the tool code, check out this tutorial on [Developing with the Motion tool](motionToolDev.md).
+
+### How it works
 
 The motion tool is an AR interface that will allow you to visually create paths for your robot or visualize realtime motion.
 
