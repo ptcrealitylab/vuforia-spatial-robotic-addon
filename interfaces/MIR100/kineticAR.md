@@ -7,7 +7,7 @@ permalink: /docs/vuforia-spatial-robotic-addon/interfaces/MIR100/kineticAR
 ## KineticAR Interfaces
 
 This is a reference to build a [**Vuforia Spatial Toolbox** (VST)](https://forum.spatialtoolbox.vuforia.com ) KineticAR prototype using robotic interfaces for any moving robot in 2D or 3D. 
-This is based on our [**Kinetic AR** UX framework](https://humanrobotinteraction.org/2020/schedule/) and it works with two components:
+This is based on our [**Kinetic AR** UX framework](https://dl.acm.org/doi/abs/10.1145/3371382.3378394) and it works with two components:
 * **[Robotic Addon Interface](../../README.md)** [To connect to the robot hardware]
 * **[Motion Tool](tools/motion/motionTool.md)** [AR UI when looking at the robot with your mobile device]
 
