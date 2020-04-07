@@ -6,7 +6,7 @@ permalink: /docs/vuforia-spatial-robotic-addon/interfaces/MIR100/tools/motion/mo
 
 # Developing with the Motion tool
 
-The Motion Tool is a [VST Tool]() that allows for path planning and realtime motion visualization.
+The Motion Tool is a [VST Spatial Tool](https://spatialtoolbox.vuforia.com/docs/use/spatial-tools) that allows for path planning and realtime motion visualization.
 It is built with HTML and Javascript and uses Node.js in order to manage all the files and dependencies.
 
 ## Getting Started
