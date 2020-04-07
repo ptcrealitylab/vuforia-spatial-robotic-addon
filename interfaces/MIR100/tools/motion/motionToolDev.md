@@ -46,9 +46,9 @@ Then we will create the CheckpointUI, that will take care of the menu to select 
 const checkpointUI = new CheckpointUI();
 ```
 
-And finally the RealityInterface object allows us to connect with the [Vuforia Spatial Edge Server](https://github.com/ptcrealitylab/vuforia-spatial-edge-server)
+And finally the SpatialInterface object allows us to connect with the [Vuforia Spatial Edge Server](https://github.com/ptcrealitylab/vuforia-spatial-edge-server)
 ```js
-const realityInterface = new RealityInterface();
+const spatialInterface = new SpatialInterface();
 ```
 
 We subscribe to the following event in order to initialize our tool.
