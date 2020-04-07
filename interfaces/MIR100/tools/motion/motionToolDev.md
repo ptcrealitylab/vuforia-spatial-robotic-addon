@@ -1,4 +1,10 @@
-# Understanding and Development of Motion tool
+---
+layout: doc
+title: Developing with the Motion Tool
+permalink: /docs/vuforia-spatial-robotic-addon/interfaces/MIR100/tools/motion/motionToolDev
+---
+
+# Developing with the Motion tool
 
 The Motion Tool is a [VST Tool]() that allows for path planning and realtime motion visualization.
 It is built with HTML and Javascript and uses Node.js in order to manage all the files and dependencies.
@@ -15,25 +21,99 @@ It makes use of THREE.js to render its contents onto the environment.
 * It is a **full screen tool**. The basic VST tools often get attached to an object as a 2D window and don't take the entire screen when rendered. 
 The motion tool is a full screen tool, it takes up all the device screen when rendered.
 
-## Initialization
+## Main references in index.js
 
-The Motion tool will be attached to an object (for example, a robot). When your device detects the object in the environment, it will automatically load the Motion tool.
+The Motion tool will be attached to an object (for example, a robot). When your device detects the object in the environment, the Motion Tool will automatically be loaded in full screen.
 You can see some screenshots of the Motion Tool here: [Motion Tool readme file](motionTool.md).
 
-The index.js file is the starting point for the Motion Tool.
-The first object generated is the mainUI containing the UI for the tool:
+We will explain here the different elements that you can find in the Motion Tool code. 
+The index.js file is the starting point for the Motion Tool. 
 
-```
+The first object generated is the MainUI containing the UI for the tool with the tracking feedback icons and the buttons to reset a path and reset the tracking. Several callbacks are set up for the mainUI.
+
+```js
 const mainUI = new MainUI();
 ```
 
-Several callbacks are set up for the mainUI.
+The ARScene will take care of generating the Three.js scene and adding all the 3D content.
 
-The second object is the KineticAR view:
-
-```
+```js
 const arScene = new ARScene();
 ```
+
+Then we will create the CheckpointUI, that will take care of the menu to select checkpoint parameters.
+```js
+const checkpointUI = new CheckpointUI();
+```
+
+And finally the RealityInterface object allows us to connect with the [Vuforia Spatial Edge Server](https://github.com/ptcrealitylab/vuforia-spatial-edge-server)
+```js
+const realityInterface = new RealityInterface();
+```
+
+We subscribe to the following event in order to initialize our tool.
+
+```js
+realityInterface.onRealityInterfaceLoaded(function() {
+    // Initialization code
+});
+```
+
+(In the next section we explain the initialization methods used)
+
+We also have a method to send data to the server in the node called 'kineticNode2' specifically used by our robotic addon to receive paths data.
+We will use this node to write to the publicData structure that will trigger the server to react every time there is new data.
+
+```js
+function pushPathsDataToServer(){
+    let pathsData = [];
+    arScene.paths.forEach(path => { pathsData.push(path.pathData); });
+
+    // realityInterface.writePublicData(nodeName, dataName, data);
+    realityInterface.writePublicData("kineticNode2", "pathData", pathsData);
+}
+```
+
+In index.js we can also find the pointer events:
+```js
+document.addEventListener( 'pointerdown', pointerDown, false );
+document.addEventListener( 'pointermove', pointerMove, false );
+document.addEventListener( 'pointerup', pointerUp, false );
+```
+
+The Update method is called at 60fps.
+
+```js
+const loop = animitter(update);
+```
+
+## Reality Interface initialization
+
+The following methods are called in the onRealityInterfaceLoaded callback, in order to configure our tool:
+
+| Method        | Explanation  |
+|:------------- |:-------------|
+| realityInterface.setFullScreenOn();      | Set tool to full screen |
+| realityInterface.setStickyFullScreenOn();      | Set tool to sticky. It won't disappear if we loose tracking of our object|
+| realityInterface.subscribeToMatrix(); | Subscribe to data from matrices from objects and groundplane      |
+| realityInterface.addMatrixListener(renderRobotCallback); | Callback for when we receive matrix data from object tracked      |
+| realityInterface.addGroundPlaneMatrixListener(groundPlaneCallback); | Callback for when we receive matrix data from [Vuforia Ground Plane](https://library.vuforia.com/articles/Training/ground-plane-guide.html)     |
+| realityInterface.setVisibilityDistance(100); | We extend the visibility distance to 100 so that the tool does not disappear when getting further      |
+| realityInterface.getScreenDimensions(...); | Resize to screen dimensions      |
+| realityInterface.setMoveDelay(-1); | Keep pointer move active after some time of pointer down      |
+| realityInterface.addReadPublicDataListener(...); | This will allow us to add a listener for data from the edge server  |
+
+## Important things to consider
+
+#### The camera is fixed at 0,0,0
+This means that we move all the 3D content along with our Ground Plane on the floor or along with our object tracked matrices.
+That is why inside of ARScene, we are generating a parent object to contain all other objects:
+
+```js
+this.groundPlaneContainerObj = new THREE.Object3D();
+```
+
+We will constantly move this object in order to match the locations in our environment.
 
 ## Authors
 
