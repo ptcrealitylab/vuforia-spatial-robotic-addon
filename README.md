@@ -28,7 +28,7 @@ You can create more robotic addons and more default tools for each one of them.
 
 ### Use the MIR100 robotic addon
 
-In order to use the MIR100 robotic addon, follow the instructions on the [KineticAR tutorial](interfaces/MIR100/kineticAR.md)
+In order to use the MIR100 robotic addon, follow the instructions on the [KineticAR tutorial](interfaces/MIR100/README.md)
 
 ### Develop new robotic addon
 
@@ -58,14 +58,6 @@ npm install
 ```
 
 This will install all the Node.js dependencies needed in your VST Server. 
-
-Now navigate to your vuforia-spatial-robotic-addon folder and npm install again:
-
-```
-npm install
-```
-
-This will install all the Node.js dependencies needed in your robotic addon folder.
 
 #### Creating your robot addon
 

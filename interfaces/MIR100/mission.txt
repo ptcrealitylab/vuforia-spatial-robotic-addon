@@ -1,4 +1,4 @@
-MISSION STRUCTURE:
+/** Sample JSON structure for the MIR missions **/
 
 {
     "mission_id":"guid_number_here",
