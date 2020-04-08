@@ -14,12 +14,13 @@ It is built with HTML and Javascript and uses Node.js in order to manage all the
 The file index.html will be rendered on the VST once the tool is activated. 
 This HTML file will trigger the Javascript file js/index.js that will start the code for the Motion Tool.
 
-The Motion Tool has two main characteristics:
+The Motion Tool has three main characteristics:
 
-* It is a **3D tool**. If you have explored the basic VST tools, they are mostly 2D HTML windows. The Motion Tool is a 3D tool. 
-It makes use of THREE.js to render its contents onto the environment.
-* It is a **full screen tool**. The basic VST tools often get attached to an object as a 2D window and don't take the entire screen when rendered. 
+1. It is a **3D tool**. If you have explored the basic [VST Spatial Tools](https://spatialtoolbox.vuforia.com/docs/use/spatial-tools), they are mostly 2D HTML windows. The Motion Tool is a 3D tool. 
+It makes use of [three.js](https://threejs.org/) to render its contents onto the environment.
+2. It is a **full screen tool**. The basic VST tools often get attached to an object as a 2D window and don't take the entire screen when rendered. 
 The motion tool is a full screen tool, it takes up all the device screen when rendered.
+3. It is a **sticky tool**. Once our object/robot has been tracked, the motion tool will keep on being rendered even if we loose the tracking of our object robot.
 
 ## Main references in index.js
 
