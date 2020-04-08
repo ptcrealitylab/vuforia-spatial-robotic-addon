@@ -14,6 +14,10 @@ These hardware interfaces allow the connection to external hardware devices such
 Currently, our system contains a sample hardware interface for 1 robotic system:
 * **[MIR100 AGV](https://www.mobile-industrial-robots.com/en/solutions/robots/mir100/)**
 
+### Platform Architecture
+
+![Image of VST tool](resources/img/vst_roboticaddons.jpg)
+
 Each robotic addon contains the code needed to connect to each robot and a folder with tools.
 The tools folder has default UI interfaces for different applications. 
 The main tool contained in our MIR100 addon is the motion tool. The motion tool allows for motion control and path planning of the robot.
