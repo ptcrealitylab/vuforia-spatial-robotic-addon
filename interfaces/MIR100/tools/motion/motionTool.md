@@ -16,7 +16,7 @@ In this tutorial we will explain how the motion tool works and how to develop wi
 ### Get Started
 
 We provide our sample robotic addon for the [MIR100](https://www.mobile-industrial-robots.com/en/solutions/robots/mir100/) robot.
-To setup the MIR100 robotic addon with the motion tool refer to our [KineticAR tutorial](../../kineticAR.md).
+To setup the MIR100 robotic addon with the motion tool refer to our [KineticAR tutorial](../../README.md).
 Once you have your robotic addon working with the motion tool, you will see a structure for your VST server similar to this one:
 
 ![Image of folders](../../../../resources/img/folders.jpg)
