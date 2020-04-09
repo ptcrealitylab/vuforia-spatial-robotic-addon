@@ -14,6 +14,10 @@ These hardware interfaces allow the connection to external hardware devices such
 Currently, our system contains a sample hardware interface for 1 robotic system:
 * **[MIR100 AGV](https://www.mobile-industrial-robots.com/en/solutions/robots/mir100/)**
 
+### Platform Architecture
+
+![Image of VST tool](resources/img/vst_roboticaddons.jpg)
+
 Each robotic addon contains the code needed to connect to each robot and a folder with tools.
 The tools folder has default UI interfaces for different applications. 
 The main tool contained in our MIR100 addon is the motion tool. The motion tool allows for motion control and path planning of the robot.
@@ -28,7 +32,7 @@ You can create more robotic addons and more default tools for each one of them.
 
 ### Use the MIR100 robotic addon
 
-In order to use the MIR100 robotic addon, follow the instructions on the [KineticAR tutorial](interfaces/MIR100/kineticAR.md)
+In order to use the MIR100 robotic addon, follow the instructions on the [KineticAR tutorial](interfaces/MIR100/README.md)
 
 ### Develop new robotic addon
 
@@ -58,14 +62,6 @@ npm install
 ```
 
 This will install all the Node.js dependencies needed in your VST Server. 
-
-Now navigate to your vuforia-spatial-robotic-addon folder and npm install again:
-
-```
-npm install
-```
-
-This will install all the Node.js dependencies needed in your robotic addon folder.
 
 #### Creating your robot addon
 
