@@ -1,0 +1,22 @@
+{
+  "name": "vuforia-spatial-robotic-addon",
+  "version": "1.0.0",
+  "description": "Robotic Addons for Vuforia Spatial Toolbox",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ptcrealitylab/vuforia-spatial-robotic-addon.git"
+  },
+  "author": "Anna Fuste",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/ptcrealitylab/vuforia-spatial-robotic-addon/issues"
+  },
+  "homepage": "https://github.com/ptcrealitylab/vuforia-spatial-robotic-addon#readme",
+  "devDependencies": {
+    "wedoboostpoweredup": "^2.0.2"
+  }
+}

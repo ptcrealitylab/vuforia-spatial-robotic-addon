@@ -19,7 +19,7 @@
     "watch": "watchify js/index.js --debug -o assets/bundle.js --verbose"
   },
   "author": "Anna Fuste",
-  "license": "MPL 2.0",
+  "license": "MPL-2.0",
   "dependencies": {
     "eventemitter3": "^4.0.0",
     "three-fbx-loader": "^1.0.3",
