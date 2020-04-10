@@ -1,7 +1,7 @@
 ---
 layout: doc
 title: KineticAR Prototyping
-permalink: /docs/vuforia-spatial-robotic-addon/interfaces/MIR100/README
+permalink: /docs/vuforia-spatial-robotic-addon/interfaces/MIR100
 ---
 
 ## KineticAR Interfaces
