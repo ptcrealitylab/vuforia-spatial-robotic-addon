@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/ptcrealitylab/vuforia-spatial-robotic-addon#readme",
   "devDependencies": {
-    "wedoboostpoweredup": "^2.0.2"
+    "wedoboostpoweredup": "^2.0.3"
   }
 }
