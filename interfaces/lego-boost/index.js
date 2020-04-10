@@ -61,6 +61,8 @@ let enableRobotConnection = false;     // For debugging purposes, deactivate fro
 if (exports.enabled) {               // These settings will be exposed to the webFrontend to potentially be modified
 
     setup();
+
+    console.log('LEGO-BOOST: Settings loaded: ', objectName, isRobotConnected, enableRobotConnection);
     
     function setup() {
         
@@ -97,10 +99,10 @@ if (exports.enabled) {               // These settings will be exposed to the we
     server.addEventListener('reset', function() {   // reload the settings from settings.json when you get a 'reset' message
         settings = server.loadHardwareInterface(__dirname);
         setup();
+
+        console.log('LEGO-BOOST: Settings loaded: ', objectName, isRobotConnected, enableRobotConnection);
     });
 }
-
-console.log('LEGO-BOOST: Settings loaded: ', objectName, isRobotConnected, enableRobotConnection);
 
 let maths = null;
 
