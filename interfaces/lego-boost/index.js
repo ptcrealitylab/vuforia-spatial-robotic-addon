@@ -48,7 +48,7 @@ var settings = server.loadHardwareInterface(__dirname);
 const { CustomMaths } = require('./customMaths');
 
 const interval = 5;
-const { Hub } = require('wedoboostpoweredup');
+const Hub = require('wedoboostpoweredup');
 let hub = null;
 
 exports.enabled = settings('enabled');
@@ -250,8 +250,22 @@ function startHardwareInterface() {
 
     });
 
-    if (enableRobotConnection){
-        hub = new Hub("lego", interval);
+    //if (enableRobotConnection){
+    if (true){
+        
+        console.log('LEGO-BOOST: Connecting to hardware');
+        //hub = new Hub("lego", interval);
+        hub = new Hub();
+
+        hub.on('connected', function (uuid) {
+            console.log('I found a device with uuid: '+uuid);
+            // Place getters and setters in here, to make sure that they are called,
+            // when the object is connected
+        });
+
+        hub.on('disconnected', function (uuid) {
+            console.log('I removed a device with uuid: '+uuid);
+        });
     }
     updateEvery(0, 100);
 }
