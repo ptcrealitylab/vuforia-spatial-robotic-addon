@@ -1,0 +1,50 @@
+{
+  "name": "vuforia-spatial-robotic-addon",
+  "version": "1.0.0",
+  "description": "Robotic Addons for Vuforia Spatial Toolbox",
+  "main": "interfaces/MIR100/index.js",
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015"
+          ]
+        }
+      ]
+    ]
+  },
+  "scripts": {
+    "build-mir100": "browserify interfaces/MIR100/tools/motion/js/index.js -o interfaces/MIR100/tools/motion/assets/bundle.js",
+    "watch-mir100": "watchify interfaces/MIR100/tools/motion/js/index.js --debug -o interfaces/MIR100/tools/motion/assets/bundle.js --verbose",
+    "build-lego-boost": "browserify interfaces/lego-boost/tools/motion/js/index.js -o interfaces/lego-boost/tools/motion/assets/bundle.js",
+    "watch-lego-boost": "watchify interfaces/lego-boost/tools/motion/js/index.js --debug -o interfaces/lego-boost/tools/motion/assets/bundle.js --verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ptcrealitylab/vuforia-spatial-robotic-addon.git"
+  },
+  "author": "Anna Fuste",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/ptcrealitylab/vuforia-spatial-robotic-addon/issues"
+  },
+  "homepage": "https://github.com/ptcrealitylab/vuforia-spatial-robotic-addon#readme",
+  "devDependencies": {
+    "wedoboostpoweredup": "^2.0.3",
+    "animitter": "^3.0.0",
+    "eventemitter3": "^4.0.0",
+    "babel-preset-es2015": "^6.14.0",
+    "babelify": "^7.3.0",
+    "browserify": "^16.5.0",
+    "concurrently": "^3.1.0",
+    "dat.gui": "^0.7.2",
+    "eases": "^1.0.8",
+    "three": "^0.89.0",
+    "three-fbx-loader": "^1.0.3",
+    "three-orbit-controls": "^82.1.0",
+    "three.meshline": "^1.2.0",
+    "watchify": "^3.11.1"
+  }
+}
