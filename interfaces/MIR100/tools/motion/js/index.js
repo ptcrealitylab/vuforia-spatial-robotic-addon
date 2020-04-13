@@ -29,7 +29,6 @@ function clearPath() {
     spatialInterface.writePublicData("kineticNode4", "ClearPath", true);
 
     pushPathsDataToServer();
-
 }
 
 /**
