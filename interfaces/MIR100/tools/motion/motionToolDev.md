@@ -4,6 +4,9 @@ title: Developing with the Motion Tool
 permalink: /docs/vuforia-spatial-robotic-addon/interfaces/MIR100/tools/motion/motionToolDev
 ---
 
+> IMPORTANT NOTE: Due to the current situation regarding COVID-19, we don't have access to the MIR100 AGV and have not been able to test the last tweaks to the interface. We have worked hard to ensure the correct functionality of the robotic addons but would much appreciate your patience if any bugs are found.
+
+
 # Developing with the Motion tool
 
 The Motion Tool is a [VST Spatial Tool](https://spatialtoolbox.vuforia.com/docs/use/spatial-tools) that allows for path planning and realtime motion visualization.

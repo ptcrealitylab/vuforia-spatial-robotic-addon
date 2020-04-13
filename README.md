@@ -4,6 +4,9 @@ title: Robotic Add-on
 permalink: /docs/vuforia-spatial-robotic-addon
 ---
 
+> IMPORTANT NOTE: Due to the current situation regarding COVID-19, we don't have access to the MIR100 AGV and have not been able to test the last tweaks to the interface. We have worked hard to ensure the correct functionality of the robotic addons but would much appreciate your patience if any bugs are found.
+
+
 ## Vuforia Spatial Robotic Add-on
 
 The vuforia-spatial-robotic-addon contains the hardware interfaces for robotic systems in the [Vuforia Spatial Toolbox server](https://github.com/ptcrealitylab/vuforia-spatial-edge-server). 
@@ -13,6 +16,9 @@ These hardware interfaces allow the connection to external hardware devices such
 
 Currently, our system contains a sample hardware interface for 1 robotic system:
 * **[MIR100 AGV](https://www.mobile-industrial-robots.com/en/solutions/robots/mir100/)**
+
+> We are in the process of developing a new interface for the **[Lego Boost](https://www.lego.com/en-us/themes/boost)**. Stay tuned!
+
 
 ### Platform Architecture
 
@@ -32,17 +38,17 @@ You can create more robotic addons and more default tools for each one of them.
 
 ### Use the MIR100 robotic addon
 
-In order to use the MIR100 robotic addon, follow the instructions on the [KineticAR tutorial](interfaces/MIR100/README.md)
+In order to use the MIR100 robotic addon, follow the instructions on the [KineticAR tutorial](interfaces/MIR100/README.md).
 
 ### Develop new robotic addon
 
 #### Get Started
 
-You may want to develop your own addon for your robot. Follow the next steps:
+In case you want to develop your own addon for your specific robot, follow the next steps:
 
-Download or clone the [vuforia-spatial-edge-server](https://github.com/ptcrealitylab/vuforia-spatial-edge-server) code and place it in your Development folder on your computer.
+1. Download or clone the [vuforia-spatial-edge-server](https://github.com/ptcrealitylab/vuforia-spatial-edge-server) code and place it in your development folder on your computer.
 
-Download or clone the [vuforia-spatial-robotic-addon](https://github.com/ptcrealitylab/vuforia-spatial-robotic-addon) code and place it in the following folder:
+2. Download or clone the [vuforia-spatial-robotic-addon](https://github.com/ptcrealitylab/vuforia-spatial-robotic-addon) code and place it in the following folder:
 
 ```
 vuforia-spatial-edge-server/addons/
@@ -63,6 +69,14 @@ npm install
 
 This will install all the Node.js dependencies needed in your VST Server. 
 
+Now do the same for your robotic addon. On your terminal navigate to vuforia-spatial-edge-server/addons/vuforia-spatial-robotic-addon and run:
+
+```
+npm install
+```
+
+This will install all the Node.js dependencies needed in the robotic addons folder.
+
 #### Creating your robot addon
 
 Create a new folder with your robot name. Respect the folder structure.
@@ -73,7 +87,7 @@ The minimum your robot addon needs is an index.js. Create the file and add it to
 
 Your index.js file should start with these two variables:
 
-```
+```js
 var server = require('@libraries/hardwareInterfaces');
 var settings = server.loadHardwareInterface(__dirname);
 ```
@@ -83,7 +97,7 @@ The settings variable lets you use external paramaters to configure your hardwar
 
 Now get the enabled variable in order to be able to activate and deactivate the code on your interface from the VST server's web frontend:
 
-```
+```js
 exports.enabled = settings('enabled');
 
 if (exports.enabled){
@@ -96,7 +110,7 @@ if (exports.enabled){
 At this point, lets check if your robot interface is being detected by the VST server. Open the terminal, go to your server folder and run the server by typing:
 
 ```
-node server.js
+node server
 ```
 
 Open a browser and type:
@@ -120,7 +134,7 @@ The following methods are the most important ones in order to develop your robot
 #### loadHardwareInterface
 Loads the hardware interface and gets the settings from the configuration file.
 
-```
+```js
 var settings = server.loadHardwareInterface(__dirname);
 ```
 
@@ -128,7 +142,7 @@ var settings = server.loadHardwareInterface(__dirname);
 You can add event listeners that will get triggered when certain things happen on the server.
 For example, you can add an event listener for when the server finishes initializing:
 
-```
+```js
 server.addEventListener("initialize", function () {
     console.log('VST Server has been initialized.');
     if (exports.enabled) startHardwareInterface();
@@ -140,7 +154,7 @@ Other events are: "shutdown", "reset", etc.
 #### enableDeveloperUI
 Set the developer UI true or false
 
-```
+```js
 server.enableDeveloperUI(true);
 ```
 
@@ -154,7 +168,7 @@ You can access the [Tool Tutorial](https://github.com/ptcrealitylab/vuforia-spat
 There can be infinite types of tools, and your robot may need to use a specific one that you create.
 The setTool method allows you to specify a default tool that your robot addon will have and be able to use when needed.
 
-```
+```js
 server.setTool(objectName, 'objectToolName', 'defaultToolName', __dirname);
 ```
 
@@ -165,7 +179,7 @@ This will automatically copy your default tool, from your robotic addon tools fo
 The Vuforia Spatial Toolbox tools make use of nodes in order to be programmed. This nodes can connect to eachother and are used to generate logic and behavior for the different tools and interfaces.
 To learn more about nodes, visit our [Node Tutorial](https://github.com/ptcrealitylab/vuforia-spatial-toolbox-documentation/blob/master/make%20tools/toolboxNodes.md).
 
-```
+```js
 server.addNode(objectName, toolName, nodeName, nodeType); 
 ```
 
@@ -175,7 +189,7 @@ This method will add a node to the toolName tool.
 
 Change position, rotation or scale of node in AR.
 
-```
+```js
 server.modeNode(objectName, frameName, nodeName, x, y, scale, matrix, loyalty); 
 ```
 
@@ -184,7 +198,7 @@ server.modeNode(objectName, frameName, nodeName, x, y, scale, matrix, loyalty);
 This method allows you to add a listener to the programming node. Every time the node changes value, the callback is triggered.
 You can, for example, create a node for your robot and connect a virtual button to it in order to turn it on.
 
-```
+```js
 server.addReadListener(objectName, frameName, nodeName, callBack);
 ```
 
