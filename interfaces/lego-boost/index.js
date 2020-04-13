@@ -252,21 +252,27 @@ function startHardwareInterface() {
 
     });
 
-    //if (enableRobotConnection){
-    if (true){
+    if (enableRobotConnection){
         
         console.log('LEGO-BOOST: Connecting to hardware');
         //hub = new Hub("lego", interval);
         hub = new Hub();
 
         hub.on('connected', function (uuid) {
-            console.log('I found a device with uuid: '+uuid);
+            console.log('LEGO-BOOST: I found a device with uuid: '+uuid);
             // Place getters and setters in here, to make sure that they are called,
             // when the object is connected
+
+            exports.settings.isRobotConnected.value = true;
+            server.pushSettingsToGui('lego-boost', exports.settings);
+            
         });
 
         hub.on('disconnected', function (uuid) {
-            console.log('I removed a device with uuid: '+uuid);
+            console.log('LEGO-BOOST: I removed a device with uuid: '+uuid);
+
+            exports.settings.isRobotConnected.value = false;
+            server.pushSettingsToGui('lego-boost', exports.settings);
         });
     }
     updateEvery(0, 100);
