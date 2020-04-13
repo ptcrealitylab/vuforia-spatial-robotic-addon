@@ -62,6 +62,8 @@ let enableMIRConnection = false;     // For debugging purposes, deactivate from 
 if (exports.enabled) {               // These settings will be exposed to the webFrontend to potentially be modified
 
     setup();
+
+    console.log('MIR: Settings loaded: ', objectName, hostIP, port, isRobotConnected, enableMIRConnection);
     
     function setup() {
         
@@ -114,10 +116,10 @@ if (exports.enabled) {               // These settings will be exposed to the we
     server.addEventListener('reset', function() {   // reload the settings from settings.json when you get a 'reset' message
         settings = server.loadHardwareInterface(__dirname);
         setup();
+
+        console.log('MIR: Settings loaded: ', objectName, hostIP, port, isRobotConnected, enableMIRConnection);
     });
 }
-
-console.log('MIR: Settings loaded: ', objectName, hostIP, port, isRobotConnected, enableMIRConnection);
 
 // Robot Websocket & REST variables
 let websocket, restapi, serverRest = null;
@@ -295,7 +297,7 @@ function nodeReadCallback(data, checkpointIdx, pathIdx){
     // if the value of the checkpoint node changed to 1, we need to send the robot to that checkpoint
     // if the value of the checkpoint node changed to 0, the robot just reached the checkpoint and we can trigger other stuff
 
-    console.log('NODE ', checkpointIdx, ' path: ', pathIdx, ' received ', data);
+    console.log('MIR: NODE ', checkpointIdx, ' path: ', pathIdx, ' received ', data);
 
     let checkpointTriggered = pathData[pathIdx].checkpoints[checkpointIdx];
 
