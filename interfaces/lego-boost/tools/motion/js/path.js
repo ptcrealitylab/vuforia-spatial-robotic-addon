@@ -6,7 +6,7 @@ import {binLerp, closestPointInRay} from "./utils";
 
 /**
  * @desc A path with all its checkpoints and graphics (spline, heightlines etc)
- * examples include activateSelectedCheckpointMode(), newCheckpoint(), newCheckpointInDevices(), updateSpline()
+ * examples include activateSelectedCheckpointMode(), newCheckpoint(), updateSpline()
  * @author Anna Fuste
  * @required eventemitter3, three, three.meshline, checkpoint.js, utils.js
  */
@@ -27,10 +27,8 @@ export class Path extends THREE.Group {
 
         this.splineMesh = new THREE.Mesh();
         this.splineMesh2 = new THREE.Mesh();
-        this.lineMeshDevices = null;
-        this.tubeLine = null;
         this.minDistanceBetweenCheckpoints = 100;
-        this.scaleIOValue = 15.0;
+        this.scaleIOValue = 10.0;
         this.heightLines = [];
         this.floorMarks = [];
 
@@ -87,26 +85,6 @@ export class Path extends THREE.Group {
         }
     }
 
-    newCheckpointInDevices(position, orientation){
-
-        // Create Checkpoint at new position
-
-        const checkpoint = new Checkpoint(this.checkpoints.length, this.pathData.index, this.checkpointFloating, this.checkpointGrounded);
-
-        checkpoint.scale.set(this.scaleIOValue, this.scaleIOValue, this.scaleIOValue);
-        checkpoint.setupFootprintForDevices(1);
-
-        this.parentContainer.add(checkpoint);
-
-        checkpoint.position.copy(position);
-        checkpoint.rotateFootprintForDevices(orientation);
-
-        this.selectedCheckpoint = checkpoint;
-
-        this.checkpoints.push(checkpoint);
-
-    }
-
     newCheckpoint(position){
 
         // Create Checkpoint at new position
@@ -134,116 +112,6 @@ export class Path extends THREE.Group {
         this.updatePathData();
 
     }
-
-
-    createTubeForDevices() {
-
-        this.parentContainer.remove(this.tubeLine);
-
-        // line material
-        var lineMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: false });
-
-        const positionsArray = this.checkpoints.map(element => {
-            let newPosition = new THREE.Vector3(element.position.x, -50, element.position.z);
-            return newPosition;
-        });
-
-        // Create Tube Geometry
-        var tubeGeometry = new THREE.TubeGeometry(
-            new THREE.CatmullRomCurve3(positionsArray),
-            512 * positionsArray.length,// path segments
-            4,// THICKNESS
-            10, //Roundness of Tube
-            false //closed
-        );
-
-        //add buffer geometry
-        let tubeBufferGeomtry = new THREE.BufferGeometry().fromGeometry(
-            tubeGeometry
-        );
-
-        this.tubeLine = new THREE.Line(tubeGeometry, lineMaterial);
-        this.parentContainer.add(this.tubeLine);
-    }
-
-    /*
-    createSplineForDevices() {
-
-        this.parentContainer.remove(this.splineMesh);
-
-        const spline = new MeshLine();
-
-        const positionsArray = this.checkpoints.map(element => {
-            let newPosition = new THREE.Vector3(element.position.x, 0, element.position.z);
-            return newPosition;
-        });
-
-        //Create a closed wavey loop
-        const curve = new THREE.CatmullRomCurve3(positionsArray);
-        const points = curve.getPoints( this.checkpoints.length * 10 );
-
-        var geometry = new THREE.Geometry();
-        geometry.vertices = points;
-
-        spline.setGeometry( geometry );
-
-        //this.textureArrow.wrapS = THREE.RepeatWrapping;
-        let material = new MeshLineMaterial({
-            //map: this.textureArrow,
-            useMap: false,
-            color: new THREE.Color('white'),
-            transparent: false,
-            opacity: 1,
-            //repeat: new THREE.Vector2(points.length, 1), // This is never going to look good
-            //dashOffset: 10,
-            resolution: new THREE.Vector2(window.innerWidth, window.innerHeight),
-            sizeAttenuation: false,
-            lineWidth: 100,
-            //near: camera.near,
-            //far: camera.far
-        });
-
-
-        this.splineMesh = new THREE.Mesh( spline.geometry, material ); // this syntax could definitely be improved!
-        //this.splineMesh.position.z += 0;
-        this.splineMesh.position.y -= 20;
-
-        console.log('DRAWING SPLINE', this.splineMesh);
-
-        this.parentContainer.add( this.splineMesh );
-
-    }
-
-     */
-
-    /*
-    createLineForDevices() {
-
-        this.parentContainer.remove(this.lineMeshDevices);
-
-        var material = new THREE.LineBasicMaterial({
-            linewidth: 10,
-            color: 0xff0000
-        });
-
-        const positionsArray = this.checkpoints.map(element => {
-            let newPosition = new THREE.Vector3(element.position.x, 0, element.position.z);
-            return newPosition;
-        });
-
-        console.log('posArray: ', positionsArray.length);
-
-        //Create a closed wavey loop
-        const curve = new THREE.CatmullRomCurve3(positionsArray);
-        const points = curve.getPoints( this.checkpoints.length * 10 );
-
-        var geometry = new THREE.Geometry();
-        geometry.vertices = points;
-
-        this.lineMeshDevices = new THREE.Line( geometry, material );
-        this.parentContainer.add( this.lineMeshDevices );
-
-    }*/
 
     updateSpline(){
 
@@ -378,7 +246,7 @@ export class Path extends THREE.Group {
             let floorMark = new THREE.Mesh( this.geometryFloor, materialFloor );
             floorMark.position.set(checkpoint.position.x, -20, checkpoint.position.z);
             floorMark.rotateX(- Math.PI/2);
-            floorMark.scale.set(1, 1, 1);
+            floorMark.scale.set(0.5, 0.5, 0.5);
             this.floorMarks.push(floorMark);
 
             this.parentContainer.add( floorMark );

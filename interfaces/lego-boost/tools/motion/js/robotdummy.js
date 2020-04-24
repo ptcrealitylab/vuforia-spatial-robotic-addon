@@ -32,7 +32,7 @@ export class RobotDummy extends THREE.Group {
 
         let textureRobotMarker = new THREE.TextureLoader().load( 'assets/textures/robotMarker2.png' );
 
-        let geometryMarker = new THREE.PlaneGeometry( 600, 600, 32 );
+        let geometryMarker = new THREE.PlaneGeometry( 100, 100, 32 );
         let materialMarker = new THREE.MeshBasicMaterial( {map: textureRobotMarker, color: 0xffffff, side: THREE.DoubleSide, transparent: true} );
 
         let robotMarker = new THREE.Mesh( geometryMarker, materialMarker );

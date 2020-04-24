@@ -53,7 +53,6 @@ const arScene = new ARScene();
 
 arScene.on('robotAnchored', sendRobotPosition);                                                             // Subscribe to send robot position to server
 arScene.on('surfaceTracked', function surfaceTracked(){ mainUI.surfaceTracked(); });                        // Subscribe to give feedback on surface tracked in mainUI
-arScene.clearRenderInDevices();
 
 // Send robot position and direction in AR to server
 function sendRobotPosition(){
@@ -71,7 +70,7 @@ document.body.appendChild( arScene.renderer.domElement );
 */
 const checkpointUI = new CheckpointUI();
 checkpointUI.on('rotate', function(){
-    arScene.activateCheckpointMode(1);
+    //arScene.activateCheckpointMode(1);
     mainUI.showCloseActionButton();
 }, false);
 checkpointUI.on('speed', function(){
@@ -84,9 +83,9 @@ checkpointUI.on('height', function(){
 }, false);
 
 checkpointUI.on('position', function(){
-    arScene.activateCheckpointMode(4);
-    mainUI.showCheckpointPositionMenu();
-    arScene.showCheckpointArrows();
+    //arScene.activateCheckpointMode(4);
+    //mainUI.showCheckpointPositionMenu();
+    //arScene.showCheckpointArrows();
     mainUI.showCloseActionButton();
 }, false);
 
@@ -137,13 +136,6 @@ spatialInterface.onRealityInterfaceLoaded(function() {
         if (arScene !== undefined) arScene.moveDummyRobot(data);    // Position robot/occlusion dummy
     });
     
-    /**
-     * This feauture is currently disabled. 
-     * This will update the visualization of the paths and checkpoints in external devices.
-     */
-    //realityInterface.addReadPublicDataListener("kineticNode2", "pathData", function (data) {
-    //    if (arScene !== undefined) arScene.updateDevices(data);
-    //});
 });
 
 function groundPlaneCallback(groundPlaneMatrix, projectionMatrix) {
