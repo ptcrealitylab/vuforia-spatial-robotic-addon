@@ -81,7 +81,6 @@ export class ARScene extends EventEmitter{
         this.lastDirection = new THREE.Vector3(1,1,1);                                                         // Last direction to compute path
 
         this.paths = [];                                                                                                // List with all path objects
-        this.pathsDevices = [];                                                                                         // List with all path objects in the server
         this.currentPath = null;
 
         // Load FBX model for checkpoints base
@@ -100,8 +99,6 @@ export class ARScene extends EventEmitter{
         this.activateCheckpointMode = this.activateCheckpointMode.bind(this);
         this.editCheckpoint = this.editCheckpoint.bind(this);
         this.anchorRobotToGroundPlane = this.anchorRobotToGroundPlane.bind(this);
-        this.updateDevices = this.updateDevices.bind(this);
-        this.clearRenderInDevices = this.clearRenderInDevices.bind(this);
     }
 
     /*
@@ -182,7 +179,7 @@ export class ARScene extends EventEmitter{
 
             switch (mode) {
                 case 1:
-                    this.currentPath.selectedCheckpoint.editRotation(this.getDeltaMouse(eventData));
+                    //this.currentPath.selectedCheckpoint.editRotation(this.getDeltaMouse(eventData));
                     break;
                 case 2:
                     this.currentPath.selectedCheckpoint.editSpeed(this.getDeltaMouse(eventData));
@@ -275,7 +272,7 @@ export class ARScene extends EventEmitter{
 
         /**** Adjust position to center of robot ****/
 
-        var translation = new THREE.Matrix4().makeTranslation(-250, -170,-300);                                // Distance from the object target origin to the center of the robot
+        var translation = new THREE.Matrix4().makeTranslation(0, 0,0);                                // Distance from the object target origin to the center of the robot
         var  robotWorld = new THREE.Matrix4();
         robotWorld.copy(this.dummy_anchor.matrixWorld);
         robotWorld.premultiply(translation);
@@ -313,33 +310,6 @@ export class ARScene extends EventEmitter{
             this.dummy_occlusion.updateMatrix();
             this.motionViz.newMotionPoint(newPosition);
         }
-    }
-
-    clearRenderInDevices(){
-        //console.log("clear render in devices");
-        if (this.pathsDevices !== null){
-            this.pathsDevices.forEach(path => {
-                path.checkpoints.forEach(checkpoint => { this.groundPlaneContainerObj.remove(checkpoint); });
-                this.groundPlaneContainerObj.remove(path.tubeLine);
-            });
-        }
-    }
-
-    updateDevices(data){
-
-        this.clearRenderInDevices();
-        this.pathsDevices = [];
-
-        data.forEach(framePath => {                                                                                     // We go through array of paths
-
-            this.pathsDevices.push(new Path(this.groundPlaneContainerObj, framePath.index, this.checkpointbaseFloating, this.checkpointbaseGrounded));
-
-            framePath.checkpoints.forEach(frameCheckpoint => {
-
-                this.pathsDevices[framePath.index].newCheckpointInDevices(new THREE.Vector3(frameCheckpoint.posX, frameCheckpoint.posY, frameCheckpoint.posZ), frameCheckpoint.orientation);
-            });
-            if (framePath.checkpoints.length > 1) this.pathsDevices[framePath.index].createTubeForDevices();
-        });
     }
 
     getDeltaMouse(eventData){

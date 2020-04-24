@@ -30,9 +30,9 @@ export class Checkpoint extends THREE.Group {
 
         this.generateHexLabel(index);
 
-        this.generateFootprint();
+        //this.generateFootprint();
 
-        this.activateRotation();
+        //this.activateRotation();
 
         /*
         // MESHES WITH ANIMATED TEXTURES!
@@ -249,18 +249,19 @@ export class Checkpoint extends THREE.Group {
         this.isFirstMove = true;
         this.edit = false;
 
+        this.checkpointMesh.material.uniforms.u_color.value.setHex(0x01FFFD);
+
+        /*
         this.planeFootprint.material.opacity = 0;
         this.planeFootprintStatic.material.opacity = 0;
         this.planeFootprintRotationProgress.material.opacity = 0;
         this.planeNumberAngle.material.opacity = 0;
-
-        this.checkpointMesh.material.uniforms.u_color.value.setHex(0x01FFFD);
-
+        
         this.planeFootprint.scale.set(0, 0, 0);
         this.planeFootprintStatic.scale.set(0, 0, 0);
         this.planeFootprintRotationProgress.scale.set(0, 0, 0);
         this.planeNumberAngle.scale.set(0, 0, 0);
-
+         */
     }
 
     /**
@@ -302,36 +303,6 @@ export class Checkpoint extends THREE.Group {
         this.heightActive = true;
         this.checkpointMesh.material.uniforms.u_color.value.setHex(0x00ff77);
         this.isFirstMove = true;
-    }
-
-    /**
-     * @desc rotates footprint in other devices connected to the server
-     * @param int $orientation - in degrees
-     */
-    rotateFootprintForDevices(orientation){
-
-        this.planeFootprint.rotation.z = orientation * Math.PI / 180;
-
-        this.orientation = orientation;
-
-        this.updateRotationSpin(this.planeFootprint.rotation.z);
-
-    }
-
-    /**
-     * @desc sets initial scale and opacity for footprint to show in other devices connected to the server
-     * @param int $scale - footprint scale
-     */
-    setupFootprintForDevices(scale){
-        this.planeFootprint.scale.set(scale, scale, scale);
-        this.planeFootprintStatic.scale.set(scale, scale, scale);
-        this.planeFootprintRotationProgress.scale.set(scale, scale, scale);
-        this.planeNumberAngle.scale.set(scale, scale, scale);
-
-        this.planeFootprint.material.opacity = 1.0;
-        this.planeFootprintStatic.material.opacity = 1.0;
-        this.planeFootprintRotationProgress.material.opacity = 1.0;
-        this.planeNumberAngle.material.opacity = 1.0;
     }
 
     editPosition(newPositionInGP){
@@ -387,6 +358,7 @@ export class Checkpoint extends THREE.Group {
 
     update(){
 
+        /*
         if (this.footprintActive && this.planeFootprint.material.opacity < 0.8) {                                       // Fade in opacity animation
             this.planeFootprint.material.opacity += 0.05;
             this.planeFootprintStatic.material.opacity += 0.05;
@@ -400,7 +372,7 @@ export class Checkpoint extends THREE.Group {
             this.planeFootprintStatic.scale.set(newScale, newScale, newScale);
             this.planeFootprintRotationProgress.scale.set(newScale, newScale, newScale);
             this.planeNumberAngle.scale.set(newScale, newScale, newScale);
-        }
+        }*/
 
         if (this.goalAnim){                                                                                             // Slightly rotate pyramid when animation is happening
             this.checkpointMesh.rotateOnAxis(new THREE.Vector3(0,1,0), 0.02);

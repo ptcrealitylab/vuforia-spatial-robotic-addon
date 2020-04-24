@@ -45,16 +45,18 @@
 var server = require('@libraries/hardwareInterfaces');
 var settings = server.loadHardwareInterface(__dirname);
 
-const { CustomMaths } = require('./customMaths');
-
-const interval = 5;
-const Hub = require('wedoboostpoweredup');
-let hub = null;
-
 exports.enabled = settings('enabled');
 exports.configurable = true;
 
+const Hub = require('wedoboostpoweredup');
+const { CustomMaths } = require('./customMaths');
+
 let objectName = '';
+let boostSpeed = 10;    // (0 - 100) motor power
+let wheelDiameter = 0;
+let wheelSeparation = 0;
+let wheelA_driftOffset = 0;
+let wheelB_driftOffset = 0;
 let isRobotConnected = false;
 let enableRobotConnection = false;     // For debugging purposes, deactivate from browser if you just want to develop on the interface without the robot connection
 
@@ -76,6 +78,41 @@ if (exports.enabled) {               // These settings will be exposed to the we
                 disabled: false,
                 helpText: 'The name of the object that connects to this hardware interface.'
             },
+            boostSpeed: {
+                value: settings('boostSpeed'),
+                type: 'number',
+                default: 10,
+                disabled: false,
+                helpText: 'Lego Boost Speed ranging from 0-100 motor power'
+            },
+            wheelDiameter: {
+                value: settings('wheelDiameter'),
+                type: 'number',
+                default: 0.03175,
+                disabled: false,
+                helpText: 'Wheel diamater for this particular robot.'
+            },
+            wheelSeparation: {
+                value: settings('wheelSeparation'),
+                type: 'number',
+                default: 0.066675,
+                disabled: false,
+                helpText: 'Distance from wheel to wheel.'
+            },
+            wheelA_driftOffset: {
+                value: settings('wheelA_driftOffset'),
+                type: 'number',
+                default: 7,
+                disabled: false,
+                helpText: 'Drift offset considering inertia, floor friction and motor power variations for wheel A.'
+            },
+            wheelB_driftOffset: {
+                value: settings('wheelB_driftOffset'),
+                type: 'number',
+                default: 5,
+                disabled: false,
+                helpText: 'Drift offset considering inertia, floor friction and motor power variations for wheel B.'
+            },
             isRobotConnected: {
                 value: settings('isRobotConnected'),
                 type: 'boolean',                                                // Variable type
@@ -95,24 +132,37 @@ if (exports.enabled) {               // These settings will be exposed to the we
     objectName = exports.settings.objectName.value;
     enableRobotConnection = exports.settings.enableRobotConnection.value;
     isRobotConnected = exports.settings.isRobotConnected.value;
+    wheelDiameter = exports.settings.wheelDiameter.value;
+    wheelSeparation = exports.settings.wheelSeparation.value;
+    wheelA_driftOffset = exports.settings.wheelA_driftOffset.value;
+    wheelB_driftOffset = exports.settings.wheelB_driftOffset.value;
+    boostSpeed = exports.settings.boostSpeed.value;
 
     server.addEventListener('reset', function() {   // reload the settings from settings.json when you get a 'reset' message
         settings = server.loadHardwareInterface(__dirname);
         setup();
 
-        console.log('LEGO-BOOST: Settings loaded: ', objectName, isRobotConnected, enableRobotConnection);
+        console.log('LEGO-BOOST: Settings loaded: ', objectName, wheelDiameter, wheelSeparation, wheelA_driftOffset, wheelB_driftOffset, isRobotConnected, enableRobotConnection);
     });
 }
 
 let maths = null;
+let hub = null;
+let boostUuid = null;
+let motorRotationForwardRatio = 0;
+let motorRotationTurnRatio = 0;
 
+let boostStatus = 0;                        // 0 - stopped | 1 - forward | 2 - rotating
 let inMotion = false;                       // When robot is moving
-let boostStatus = {};                       // TODO: BOOST STATUS ??
+
+let nextDistance = 0;
+let nextRotation = 0;
+let motorCounter = 0;
+
 let arStatus = {};                          // AR STATUS
 
 let pathData = [];                          // List of paths with checkpoints
 let activeCheckpointName = null;            // Current active checkpoint
-
 const groundPlaneScaleFactor = 1000;        // In mm
 let lastPositionAR = {x: 0, y: 0};          // Last position of the robot in AR
 let lastDirectionAR = {x: 0, y: 0};         // Last direction of the robot in AR
@@ -133,14 +183,16 @@ function startHardwareInterface() {
     maths = new CustomMaths();
 
     console.log('LEGO-BOOST: Setting default tool to motion');
-    server.setTool(objectName, 'kineticAR', 'motion', __dirname);
+    server.setTool(objectName, 'kineticAR', 'motion', __dirname);   // Set motion tool as the default tool for lego-boost
 
     server.addNode(objectName, "kineticAR", "kineticNode1", "storeData");     // Node for realtime robot position data
     server.addNode(objectName, "kineticAR", "kineticNode2", "storeData");     // Node for the data path. Follow Checkpoints
     server.addNode(objectName, "kineticAR", "kineticNode3", "storeData");     // Node for receiving AR status
     server.addNode(objectName, "kineticAR", "kineticNode4", "storeData");     // Node for cleaning the path
-
+    
     server.addPublicDataListener(objectName, "kineticAR", "kineticNode3","ARstatus",function (data){
+
+        // When robot is first tracked, server receives AR location data
 
         arStatus = data;
 
@@ -156,8 +208,8 @@ function startHardwareInterface() {
         initPositionBoost.y = currentPositionBoost.y;
         initialSync = true;
 
-        console.log("LAST POSITION AR: ", lastPositionAR);              //       { x: -332.3420, y: 482.1173, z: 1749.54107 }
-        console.log("LAST DIRECTION AR: ", lastDirectionAR);            //       { x: -0.84, y: -0.00424 }
+        console.log("LEGO-BOOST: Last Position AR: ", lastPositionAR);              //  3D position data. Ex: { x: -332.3420, y: 482.1173, z: 1749.54107 }
+        console.log("LEGO-BOOST: Last Direction AR: ", lastDirectionAR);            //  2D vector. Ex: { x: -0.84, y: -0.00424 }
 
     });
 
@@ -220,7 +272,7 @@ function startHardwareInterface() {
 
                             server.addNode(objectName, "kineticAR", frameCheckpoint.name, "node");
 
-                            console.log('NEW ' + frameCheckpoint.name + ' | position: ', frameCheckpoint.posX, frameCheckpoint.posZ);
+                            console.log('LEGO-BOOST: NEW ' + frameCheckpoint.name + ' | position: ', frameCheckpoint.posX, frameCheckpoint.posZ);
 
                             server.moveNode(objectName, "kineticAR", frameCheckpoint.name, frameCheckpoint.posX, frameCheckpoint.posZ, 0.3,[
                                 1, 0, 0, 0,
@@ -229,7 +281,7 @@ function startHardwareInterface() {
                                 0, 0, frameCheckpoint.posY * 2, 1
                             ], true);
                             
-                            //console.log(' ************** Add read listener to ', frameCheckpoint.name);
+                            //console.log('LEGO-BOOST: ************** Add read listener to ', frameCheckpoint.name);
                             
                             server.addReadListener(objectName, "kineticAR", frameCheckpoint.name, function(data){            // Add listener to node
 
@@ -246,7 +298,7 @@ function startHardwareInterface() {
             if (!pathExists) pathData.push(framePath);   // If the path doesn't exist on the server, add it to the server path data
         });
 
-        console.log("LEGO-BOOST: Current PATH DATA in SERVER: ", JSON.stringify(pathData));
+        //console.log("LEGO-BOOST: Current PATH DATA in SERVER: ", JSON.stringify(pathData));
 
         server.pushUpdatesToDevices(objectName);
 
@@ -255,16 +307,41 @@ function startHardwareInterface() {
     if (enableRobotConnection){
         
         console.log('LEGO-BOOST: Connecting to hardware');
-        //hub = new Hub("lego", interval);
+
         hub = new Hub();
 
         hub.on('connected', function (uuid) {
             console.log('LEGO-BOOST: I found a device with uuid: '+uuid);
-            // Place getters and setters in here, to make sure that they are called,
-            // when the object is connected
+
+            boostUuid = uuid;
 
             exports.settings.isRobotConnected.value = true;
             server.pushSettingsToGui('lego-boost', exports.settings);
+
+            /** Uncomment this to experiment with ratios and motor rotations for your wheels **/
+            //setTimeout(setspeed, 1000);
+            function setspeed(){
+
+                // 16 - back wheels
+                // 2 - rear helix
+                // 0 - back wheel A
+                // 1 - back wheel B
+
+                hub.setMotorDegrees(873, boostSpeed, 0, boostUuid);
+                hub.setMotorDegrees(873, (-1)*boostSpeed, 1, boostUuid);
+
+            }
+            
+            let p_wheel = 2*Math.PI*(wheelDiameter/2);
+            motorRotationForwardRatio = 360/p_wheel;        // motorRotation = 360 degrees / perimeter of wheel
+            
+            let p_turn = 2*Math.PI*(wheelSeparation/2);
+            motorRotationTurnRatio = p_turn / p_wheel;      // How many rotations for one turn
+            
+            /* Perimeter wheel Formula: 2*Math.PI*(wheelDiameter/2) meters => 1 motor rotation
+            *   For lego boost: 0.099746 m => 1 motor rotation
+            *   For lego boost 0.066675 m of wheelSeparation. 0.20947 perimeter turn
+            */
             
         });
 
@@ -273,6 +350,14 @@ function startHardwareInterface() {
 
             exports.settings.isRobotConnected.value = false;
             server.pushSettingsToGui('lego-boost', exports.settings);
+        });
+
+        hub.on('motor', function (motorRotation, port, uuid) {
+
+            console.log('LEGO-BOOST: PORT: ' + port + ' --- motorRotation.absoluteDeg: ' + motorRotation.absoluteDeg);
+            
+            motorCounter = 0;   // This is used to know when robot stops moving
+            
         });
     }
     updateEvery(0, 100);
@@ -289,39 +374,37 @@ function nodeReadCallback(data, checkpointIdx, pathIdx){
 
     if (data.value === 1){
 
-        if (!checkpointTriggered.active){   // Checkpoint has changed from not active to active. We have to send robot here
+        if (!checkpointTriggered.active){
 
             console.log('LEGO-BOOST: Checkpoint has changed from not active to active: ', checkpointTriggered.name);
             
             activeCheckpointName = checkpointTriggered.name;
-            checkpointTriggered.active = 1;             // This checkpoint gets activated
+            checkpointTriggered.active = 1;
 
             // TODO: COMPUTE MOVEMENT FOR BOOST
 
-            let boostMovement = computeBoostMovement(checkpointTriggered.posX, checkpointTriggered.posZ, checkpointTriggered.orientation);
+            let boostMovement = computeBoostMovementTo(checkpointTriggered.posX, checkpointTriggered.posZ);
             
-            inMotion = true;
         } else {
             console.log('LEGO-BOOST: WARNING: This checkpoint was already active!');
         }
 
-    } else if (data.value === 0){   // If node receives a 0
+    } else if (data.value === 0){
 
         if (checkpointTriggered.active){
 
             console.log('LEGO-BOOST: Checkpoint has changed from active to not active: ', checkpointTriggered.name);
 
-            if (inMotion){      // The node has been deactivated in the middle of the move mission. We need to delete the mission from the mission queue
+            if (inMotion){          // The node has been deactivated in the middle of the move mission.
                 
                 console.log('LEGO-BOOST: Mission interrupted');
 
                 // TODO: STOP BOOST
 
-
-            } else {        // Checkpoint has changed from active to not active, robot just got here. We have to trigger next checkpoint
+            } else {                // Checkpoint has changed from active to not active, robot just got here. We have to trigger next checkpoint
                 
                 console.log('LEGO-BOOST: Checkpoint reached: ', checkpointTriggered.name);
-                checkpointTriggered.active = 0; // This checkpoint gets deactivated
+                checkpointTriggered.active = 0;
 
                 let nextCheckpointToTrigger = null;
 
@@ -342,11 +425,34 @@ function nodeReadCallback(data, checkpointIdx, pathIdx){
     }
 }
 
+function computeBoostMovementTo(newCheckpointX, newCheckpointY){
 
-// TODO: compute BOOST movement
-function computeBoostMovement(newCheckpointX, newCheckpointY, checkpointOrientation){
+    let lastDirectionTo = [lastDirectionAR.x, lastDirectionAR.y];
+
+    let from = [lastPositionAR.x, lastPositionAR.y];
+    let to = [newCheckpointX / groundPlaneScaleFactor, newCheckpointY / groundPlaneScaleFactor];
+
+    nextDistance = maths.distance(from, to);                                   // Distance that the robot has to travel to get to the next point
+
+    let newDirectionVector = [to[0] - from[0], to[1] - from[1]];                    // newDirection = to - from
+
+    let angleBetween = maths.signed_angle(newDirectionVector, lastDirectionTo);     // Angle between direction vectors
+    
+    nextRotation = maths.radians_to_degrees(angleBetween);                 // Angle that the robot has to turn to go to next coordinate in deg
+
+    lastDirectionAR.x = newDirectionVector[0];
+    lastDirectionAR.y = newDirectionVector[1];
+
+    lastPositionAR.x = to[0];
+    lastPositionAR.y = to[1];
+    
+    inMotion = false;
+    motorCounter = 0;
+    boostStatus = 2;    // First, rotate towards next checkpoint
     
 }
+
+let nextMotorRotation = 0;
 
 /**
  * @desc UPDATE method
@@ -355,6 +461,92 @@ function updateEvery(i, time) {
     setTimeout(() => {
         
         // TODO: Send realtime position ??
+
+        if (enableRobotConnection){
+            switch (boostStatus) {
+                case 0:
+                    // Robot stopped. Do nothing
+                    break;
+                case 1:
+                    // Activate two motor wheels
+
+                    nextMotorRotation = nextDistance * motorRotationForwardRatio;
+                    
+                    console.log('LEGO-BOOST: MOVE FORWARD ', nextDistance, ' meters | nextAbsoluteMotorRotation: ', nextMotorRotation);
+                    
+                    hub.setMotorDegrees(nextMotorRotation, (-1) * boostSpeed, 16, boostUuid);
+
+                    inMotion = true;
+                    boostStatus = 3;
+                    
+                    break;
+                case 2:
+                    
+                    if (nextRotation > 0)
+                    {
+                        nextMotorRotation = nextRotation * (motorRotationTurnRatio + wheelA_driftOffset);
+
+                        console.log('LEGO-BOOST: ROTATE LEFT! ' + nextRotation + ' degrees | next Motor Rotation: ' + nextMotorRotation + ' degrees.');
+                        
+                        hub.setMotorDegrees(nextMotorRotation, (-1) * boostSpeed, 0, boostUuid);
+                        hub.setMotorDegrees(nextMotorRotation, boostSpeed, 1, boostUuid);
+                        
+                    } else {
+                        
+                        nextMotorRotation = nextRotation * (motorRotationTurnRatio + wheelB_driftOffset);
+
+                        console.log('LEGO-BOOST: ROTATE RIGHT! ' + nextRotation + ' degrees | next Motor Rotation: ' + nextMotorRotation + ' degrees.');
+                        
+                        hub.setMotorDegrees(nextMotorRotation, (-1) * boostSpeed, 1, boostUuid);
+                        hub.setMotorDegrees(nextMotorRotation, boostSpeed, 0, boostUuid);
+
+                    }
+
+                    inMotion = true;
+                    boostStatus = 4;
+                    
+                    break;
+                    
+                case 3:
+                    
+                    // Moving forward
+                    motorCounter += 1;
+                    console.log('LEGO-BOOST: Forward...', motorCounter);
+
+                    if (motorCounter > 10){  // Motor has stopped. Boost stopped moving forward. We reached checkpoint
+                        
+                        console.log('LEGO-BOOST: MOTOR HAS STOPPED');
+                        
+                        boostStatus = 0;
+                        inMotion = false;
+                        motorCounter = 0;
+                        
+                        if (activeCheckpointName !== null) {     // robot has finished mission. Send a 0 to current checkpoint
+                            server.write(objectName, "kineticAR", activeCheckpointName, 0);
+                        }
+                    }
+                    
+                    break;
+                case 4:
+                    
+                    // Turning
+                    motorCounter += 1;
+                    console.log('LEGO-BOOST: Rotating...', motorCounter);
+                    
+                    if (motorCounter > 10){  // Motor has stopped. Boost stopped turning, now MOVE FORWARD
+                        
+                        console.log('LEGO-BOOST: MOTOR HAS STOPPED');
+                        
+                        motorCounter = 0;
+                        inMotion = false;
+                        boostStatus = 1;
+                    }
+                    
+                    break;
+                default:
+                    break;
+            }
+        }
         
         updateEvery(++i, time);
     }, time)
