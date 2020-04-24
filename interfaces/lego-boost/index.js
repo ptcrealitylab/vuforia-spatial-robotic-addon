@@ -511,7 +511,6 @@ function updateEvery(i, time) {
                     
                     // Moving forward
                     motorCounter += 1;
-                    console.log('LEGO-BOOST: Forward...', motorCounter);
 
                     if (motorCounter > 10){  // Motor has stopped. Boost stopped moving forward. We reached checkpoint
                         
