@@ -319,7 +319,7 @@ function startHardwareInterface() {
             server.pushSettingsToGui('lego-boost', exports.settings);
 
             /** Uncomment this to experiment with ratios and motor rotations for your wheels **/
-            //setTimeout(setspeed, 1000);
+            setTimeout(setspeed, 1000);
             function setspeed(){
 
                 // 16 - back wheels
@@ -327,8 +327,10 @@ function startHardwareInterface() {
                 // 0 - back wheel A
                 // 1 - back wheel B
 
-                hub.setMotorDegrees(873, boostSpeed, 0, boostUuid);
-                hub.setMotorDegrees(873, (-1)*boostSpeed, 1, boostUuid);
+                //hub.setMotorDegrees(685, boostSpeed, 0, boostUuid);
+                //hub.setMotorDegrees(685, (-1)*boostSpeed, 1, boostUuid);
+
+                hub.setMotorDegrees(20, boostSpeed, 3, boostUuid);
 
             }
             
@@ -340,8 +342,14 @@ function startHardwareInterface() {
             
             /* Perimeter wheel Formula: 2*Math.PI*(wheelDiameter/2) meters => 1 motor rotation
             *   For lego boost: 0.099746 m => 1 motor rotation
-            *   For lego boost 0.066675 m of wheelSeparation. 0.20947 perimeter turn
+            *   For lego boost: 0.066675 m of wheelSeparation. 0.20947 perimeter turn
             */
+
+            /* big wheels */
+            let wheelLength = 0.2286; // 9 inches = 0.2286 m
+
+            motorRotationTurnRatio = 873/360;
+            motorRotationForwardRatio = 670/wheelLength;
             
         });
 
@@ -474,7 +482,7 @@ function updateEvery(i, time) {
                     
                     console.log('LEGO-BOOST: MOVE FORWARD ', nextDistance, ' meters | nextAbsoluteMotorRotation: ', nextMotorRotation);
                     
-                    hub.setMotorDegrees(nextMotorRotation, (-1) * boostSpeed, 16, boostUuid);
+                    hub.setMotorDegrees(nextMotorRotation, boostSpeed, 16, boostUuid);
 
                     inMotion = true;
                     boostStatus = 3;
@@ -484,6 +492,7 @@ function updateEvery(i, time) {
                     
                     if (nextRotation > 0)
                     {
+                        wheelA_driftOffset = 0;
                         nextMotorRotation = nextRotation * (motorRotationTurnRatio + wheelA_driftOffset);
 
                         console.log('LEGO-BOOST: ROTATE LEFT! ' + nextRotation + ' degrees | next Motor Rotation: ' + nextMotorRotation + ' degrees.');
@@ -492,7 +501,8 @@ function updateEvery(i, time) {
                         hub.setMotorDegrees(nextMotorRotation, boostSpeed, 1, boostUuid);
                         
                     } else {
-                        
+
+                        wheelB_driftOffset = 0;
                         nextMotorRotation = nextRotation * (motorRotationTurnRatio + wheelB_driftOffset);
 
                         console.log('LEGO-BOOST: ROTATE RIGHT! ' + nextRotation + ' degrees | next Motor Rotation: ' + nextMotorRotation + ' degrees.');

@@ -291,6 +291,7 @@ export class ARScene extends EventEmitter{
 
         /* The robot was scanned as an object target with an offset of 90 degrees
         * so the forward vector is actually the up vector */
+        
         this.lastDirection.copy(this.dummy_anchor.up);
         this.lastDirection = this.lastDirection.applyQuaternion( this.dummy_anchor.quaternion );                        // This gets direction in ground plane coordinates
 
