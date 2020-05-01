@@ -328,19 +328,20 @@ function startHardwareInterface() {
             server.pushSettingsToGui('lego-boost', exports.settings);
 
             /** Uncomment this to experiment with ratios and motor rotations for your wheels **/
-            setTimeout(setspeed, 1000);
+            //setTimeout(setspeed, 1000);
             function setspeed(){
 
                 // 16 - back wheels
                 // 2 - rear helix
                 // 0 - back wheel A
                 // 1 - back wheel B
+                // 3 - Head
 
                 //hub.setMotorDegrees(685, boostSpeed, 0, boostUuid);
                 //hub.setMotorDegrees(685, (-1)*boostSpeed, 1, boostUuid);
 
-                hub.setMotorDegrees(20, boostSpeed, 3, boostUuid);
-
+                hub.setMotorDegrees(10, boostSpeed, 3, boostUuid);
+                hub.setMotorDegrees(-10, boostSpeed, 3, boostUuid);
             }
             
             if (wheelType === 0){
@@ -404,6 +405,8 @@ function nodeReadCallback(data, checkpointIdx, pathIdx){
             activeCheckpointName = checkpointTriggered.name;
             checkpointTriggered.active = 1;
 
+            server.writePublicData(objectName, "kineticAR", "kineticNode1", "CheckpointTriggered", checkpointIdx);         // Alert frame of new checkpoint goal
+
             // TODO: COMPUTE MOVEMENT FOR BOOST
 
             let boostMovement = computeBoostMovementTo(checkpointTriggered.posX, checkpointTriggered.posZ);
@@ -428,6 +431,8 @@ function nodeReadCallback(data, checkpointIdx, pathIdx){
                 
                 console.log('LEGO-BOOST: Checkpoint reached: ', checkpointTriggered.name);
                 checkpointTriggered.active = 0;
+
+                server.writePublicData(objectName, "kineticAR", "kineticNode1", "CheckpointStopped", checkpointIdx);       // Tell frame checkpoint has been reached
 
                 let nextCheckpointToTrigger = null;
 
