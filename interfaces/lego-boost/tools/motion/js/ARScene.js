@@ -47,16 +47,15 @@ export class ARScene extends EventEmitter{
         this.robotDummy.matrixAutoUpdate = false;
         this.scene.add( this.robotDummy );
 
-        this.dummy_anchor = null;                                                                                       // Robot Anchor to Ground Plane
+        this.robotAnchor = null;                                                                                       // Robot Anchor to Ground Plane
 
-        this.dummy_groundPlaneOrigin = this.robotDummy.clone();                                                         // Ground Plane Origin
-        this.scene.remove(this.dummy_groundPlaneOrigin);
+        this.dummy_groundPlaneOrigin = new AxisDummy(0xffffff);                                                         // Ground Plane Origin
         this.groundPlaneContainerObj.add(this.dummy_groundPlaneOrigin);
         this.dummy_groundPlaneOrigin.position.set(0,0,0);
 
         this.dummy_occlusion = new RobotDummy();                                                                        // Realtime robot object from physical robot
         this.dummy_occlusion.matrixAutoUpdate = false;
-        this.groundPlaneContainerObj.add(this.dummy_occlusion);
+        //this.groundPlaneContainerObj.add(this.dummy_occlusion);
         this.dummy_occlusion.position.set(0,0,0);
         this.dummy_occlusion.updateMatrix();
 
@@ -250,7 +249,7 @@ export class ARScene extends EventEmitter{
             this.counter++;
             if (this.counter > 100 && !this.isRobotAnchorSet && this.isGroundPlaneTracked){
 
-                this.anchorRobotToGroundPlane();
+                this.anchorRobotToGroundPlane(modelviewmatrix);
 
                 this.emit('robotAnchored');
 
@@ -261,38 +260,38 @@ export class ARScene extends EventEmitter{
         }
     }
 
-    anchorRobotToGroundPlane(){
+    anchorRobotToGroundPlane(robotMatrix){
 
-        if (this.dummy_anchor !== null) this.groundPlaneContainerObj.remove(this.dummy_anchor);                         // Remove previous anchor from ground plane
+        if (this.robotAnchor !== null) this.groundPlaneContainerObj.remove(this.robotAnchor);                         // Remove previous anchor from ground plane
         if (this.motionViz !== null) this.motionViz.clearMotionLine();                                                  // Reset motion visualization
 
-        this.dummy_anchor = this.robotDummy.clone();
+        this.robotAnchor = new RobotDummy();
+        
+        this.scene.add(this.robotAnchor);
+        
+        this.robotAnchor.matrixAutoUpdate = false;
 
-        THREE.SceneUtils.attach( this.dummy_anchor, this.scene, this.groundPlaneContainerObj );                         // This will remove robot dummy from scene and anchor to ground plane
+        setMatrixFromArray(this.robotAnchor.matrix, robotMatrix);
+        
+        //this.robotAnchor.matrix.setPosition( this.robotDummy.matrix.position );
+        //this.robotAnchor.matrix.setRotation( this.robotDummy.matrix.rotation );
+        
+        
+        THREE.SceneUtils.attach( this.robotAnchor, this.scene, this.groundPlaneContainerObj );                         // This will remove robot dummy from scene and anchor to ground plane
 
+        this.robotAnchor.translateY(80);
+        this.robotAnchor.translateZ(-50);
+        this.robotAnchor.updateMatrix();
+        
         /**** Adjust position to center of robot ****/
-
-        var translation = new THREE.Matrix4().makeTranslation(0, 0,0);                                // Distance from the object target origin to the center of the robot
-        var  robotWorld = new THREE.Matrix4();
-        robotWorld.copy(this.dummy_anchor.matrixWorld);
-        robotWorld.premultiply(translation);
-        var newRobotPosition = new THREE.Vector3();
-        var newRobotRotation = new THREE.Quaternion();
-        var newRobotScale = new THREE.Vector3();
-        robotWorld.decompose(newRobotPosition,newRobotRotation,newRobotScale);
-        robotWorld.getInverse(this.groundPlaneContainerObj.matrix);
-        newRobotPosition.applyMatrix4(robotWorld);
-
-        this.dummy_anchor.position.copy(newRobotPosition);
-        this.dummy_anchor.matrixAutoUpdate = true;
-        this.dummy_anchor.updateMatrix();
-
-        this.lastPosition.copy(this.dummy_anchor.position);
+        
+        this.lastPosition.copy(this.robotAnchor.position);
 
         /* The robot was scanned as an object target with an offset of 90 degrees
         * so the forward vector is actually the up vector */
-        this.lastDirection.copy(this.dummy_anchor.up);
-        this.lastDirection = this.lastDirection.applyQuaternion( this.dummy_anchor.quaternion );                        // This gets direction in ground plane coordinates
+        
+        this.lastDirection.copy(this.robotAnchor.up);
+        this.lastDirection = this.lastDirection.applyQuaternion( this.robotAnchor.quaternion );                        // This gets direction in ground plane coordinates
 
     }
 
@@ -303,8 +302,8 @@ export class ARScene extends EventEmitter{
     **      data.z                  - realtime MIR AR orientation
     */
     moveDummyRobot(data){
-        if (this.dummy_anchor != null){
-            let newPosition = new THREE.Vector3(data.x * 1000, this.dummy_anchor.position.y , data.y * 1000);
+        if (this.robotAnchor != null){
+            let newPosition = new THREE.Vector3(data.x * 1000, this.robotAnchor.position.y , data.y * 1000);
             this.dummy_occlusion.position.set(newPosition.x, newPosition.y , newPosition.z);
             this.dummy_occlusion.rotation.set(this.dummy_occlusion.rotation.x, data.z, this.dummy_occlusion.rotation.z);
             this.dummy_occlusion.updateMatrix();
