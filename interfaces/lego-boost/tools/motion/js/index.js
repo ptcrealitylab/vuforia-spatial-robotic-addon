@@ -121,7 +121,7 @@ spatialInterface.onRealityInterfaceLoaded(function() {
     });
     
     spatialInterface.setMoveDelay(-1);  // Keep pointer move active after some time of pointer down
-
+    
     spatialInterface.addReadPublicDataListener("kineticNode1", "CheckpointStopped", function (data){
         console.log('Checkpoint STOPPED: ', data);
         if (arScene !== undefined) arScene.checkpointReached(data);
