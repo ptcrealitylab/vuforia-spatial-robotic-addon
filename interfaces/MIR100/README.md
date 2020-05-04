@@ -1,7 +1,7 @@
 ---
 layout: doc
 title: KineticAR Prototyping
-permalink: /docs/vuforia-spatial-robotic-addon/interfaces/MIR100
+permalink: /docs/vuforia-spatial-robotic-addon/interfaces/MIR100/README
 ---
 
 > IMPORTANT NOTE: Due to the current situation regarding COVID-19, we don't have access to the MIR100 AGV and have not been able to test the last tweaks to the interface. We have worked hard to ensure the correct functionality of the robotic addons but would much appreciate your patience if any bugs are found.
