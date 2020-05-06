@@ -77,6 +77,7 @@ if (exports.enabled) {               // These settings will be exposed to the we
                 value: settings('objectName'),
                 type: 'text',
                 disabled: false,
+                default: 'legoBoost',
                 helpText: 'The name of the object that connects to this hardware interface.'
             },
             boostSpeed: {
@@ -132,6 +133,7 @@ if (exports.enabled) {               // These settings will be exposed to the we
                 value: settings('enableRobotConnection'),                         // Variable type
                 type: 'boolean',                                                // Default value assigned to this variable
                 disabled: false,                                                // If this variable should be editable or not
+                default: false,
                 helpText: 'Do you want to enable the connection of the robot?'  // Text that will appear on the web frontend
             }
         };

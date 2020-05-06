@@ -4,6 +4,8 @@ title: Lego Boost Kinetic AR Prototyping
 permalink: /docs/vuforia-spatial-robotic-addon/interfaces/lego-boost/README
 ---
 
+> IMPORTANT NOTE: The accuracy of this interface highly depends on floor friction and motor power that can have small variations from robot to robot. In order to improve the accuracy of the interface make sure you adjust the parameters properly for your own Lego Boost.
+
 ## Lego Boost Kinetic AR Prototyping
 
 This is a reference to build a [**Vuforia Spatial Toolbox** (VST)](https://forum.spatialtoolbox.vuforia.com ) path planning prototype using robotic interfaces for a Lego Boost robot. 
@@ -106,20 +108,24 @@ You will have to generate this object target from the Vuforia Developer Portal. 
 
 With the server running, follow this steps on the VST Server interface on your browser:
 
-* Click on 'Add Object'. Give this object the name of your robot: 'yourRobotNameHere'.
+* Click on 'Add Object'. Give this object the name of your robot: 'legoBoost'.
 * Click on 'Add Target'
 
 The interface will ask you to create a Vuforia Target with the name provided. 
 
-![Image of VST tool](../../resources/img/VuforiaTargetName.png) 
+![Image of Lego Boost in server](../../resources/img/legoBoost_object.png) 
 
-This name (that follows the pattern: yourRobotName+ABunchOfLettersAndNumbers) is the name you need when generating your Vuforia Target.
+This name (that follows the pattern: legoBoost+ABunchOfLettersAndNumbers) is the name you need when generating your Vuforia Target.
 
 Now go to the [Vuforia Developer Portal](https://developer.vuforia.com/).<br />
-Go to the Target Manager and add a new target. When prompted, add the name you got from the VST interface (yourRobotName+aBunchOfLettersAndNumbers).
+Go to the Target Manager and add a new target. This target must be a Vuforia target that the robot has attached to it. In our example, we use an image target on the back of the robot:
+
+![Image of robot target](../../resources/img/legoboost_imagetarget.jpg)
+
+When prompted, add the name you got from the VST interface (legoBoost+ABunchOfLettersAndNumbers).
 
 Download the target when processed. 
-When prompted to select a development platform, select the option Android Studio, Xcode or Visual Studio.
+When asked to select a development platform, select the option Android Studio, Xcode or Visual Studio.
 
 #### Creating a VST tool through the VST server
 
@@ -132,69 +138,22 @@ On the 'Add Target' interface:
 At this point, if you go to your file system and navigate to the spatialToolbox folder, you should see that a folder has been created for your object and your tool.
 
 ```
-Documents/spatialToolbox/yourObjectName/kineticAR
+Documents/spatialToolbox/legoBoost/kineticAR
 ```
 
-In this frame folder you will host the code that will generate the KineticAR tool once you detect your robot.
+In this tool folder you will host the code that will generate the KineticAR tool once you detect your robot.
 By default you will see two files: index.html and bird.png. <br />
 Here, you can develop your own tools to be used when tracking your object.
 
 For our example on KineticAR, the system will automatically copy the tool from the robotic addon interface. So, on to that:
 
-#### Initializing your robotic addon interface
-
-If you want to use the existing robotic addons (MIR100) with the default 'kineticAR' tool, skip to Testing.
-If you want to create a new robotic addon, continue reading.
-
-In order to create your own robotic addon interface, access the following folder:
-
-```
-vuforia-spatial-edge-server/addons/vuforia-spatial-robotic-addon/interfaces/
-```
-
-In this folder, you will find all the robotic interfaces. 
-
-You can build your interface from scratch, but if you want to create a path planning application, we recommend that you use our MIR100 interface code.
-Duplicate the MIR100 folder and rename it with the name of your robot.
-
-Inside of your robotic addon folder you will find another folder called 'tools'. These are the default tools that can be used with this robotic addon.
-
-```
-vuforia-spatial-edge-server/addons/vuforia-spatial-robotic-addon/interfaces/your_robot/tools
-```
-
-By default, this folder contains the motion tool that will work with your robotic addon interface.
-
-#### Develop the motion tool
-
-The motion tool is a user interface that is built from several Javascript files compiled together into a bundle.js file.
-
-If you want to change or develop this tool further you will have to generate or update the bundle.js file that will contain all your tool code compiled in one file only.
-To build the bundle.js file once, you can use the scripts found in the package.json on the root of the repo. For example:
-
-```
-npm run build-mir100
-```
-
-This command will trigger the generation of the bundle.js file for the MIR100 motion tool.
-If your purpose is to develop, type this instead:
-
-```
-npm run watch-mir100
-```
-
-This second command will trigger the generation of the bundle.js file every time there is a change in your code. This is for development purposes.
-
-If you create a new robotic addon and want to use this methods, you can add a new script command in the package.json on the root of the repo.
-
 ### Configure robot
 
-The hardware interface for your robot, can optionally have configuration settings that you can change through the server browser interface.
-To learn how to create a configuration page for your hardware interface on the server from scratch, read the [Configurable Hardware Interface readme file](https://github.com/ptcrealitylab/vuforia-spatial-toolbox-documentation/blob/master/interfaceWithHardware/configurableSettingsForInterfaces.md).
+The Lego Boost robotic addon has configuration settings that you can change through the server browser interface.
 
-If you are using an MIR100 robot, we already have an interface for it. Follow the next steps:
+Follow the next steps:
 
-Run the server:
+Run the server from the root folder:
 
 ```
 node server
@@ -206,19 +165,24 @@ Go to the server in the browser:
 localhost:8080
 ```
 
-
 Select 'Manage Hardware Interfaces'.
 
 You will see a list of the hardware interfaces that are on your server. You can turn them on and off.
 
-Turn the MIR100 hardware interface on and click on the yellow gear for configuration.
-You will see the configuration parameters for the MIR100 robot as follows:
+Turn the lego-boost hardware interface on.
+Now restart the server again.
 
-![Image of VST tool](../../resources/img/mir_config.png) 
+```
+node server
+```
+
+Go back to the browser interface, to ManageHardwareInterfaces and click on the yellow gear next to legoBoost for configuration.
+You will see the configuration parameters for the Lego Boost robot as follows:
+
+![Image of VST tool](../../resources/img/legoBoost_config.png) 
 
 Modify the parameters to match your configuration.
-Modify the IP and port so that they match the one from your robot.
-Change the object name to the name you used for your Object.
+Make sure the object name is the same one as the object you have created ('legoBoost').
 Finally, set enableMIRConnection to true, so that the software tries to connect to the robot.
 
 Once this is all setup, stop your server. Go to the next section: Testing.
@@ -228,7 +192,7 @@ Once this is all setup, stop your server. Go to the next section: Testing.
 At this point, you have everything setup and you should test to make sure that everything works together.
 Follow these steps to ensure that your code runs properly.
 
-* Make sure the computer running the server, the smartphone with the Reality Editor application, and your robot are on the same network.
+* Make sure the computer running the server and the smartphone with the Vuforia Spatial Toolbox application are on the same network.
 * On your terminal, navigate to the folder 'vuforia-spatial-edge-server/'
 * Run the server by typing:
 
@@ -236,19 +200,16 @@ Follow these steps to ensure that your code runs properly.
 node server.js
 ```
 
-If you are using an MIR100 robot or have any other robot with configuration parameters on the server browser interface, access it in order to make sure the robot has been connected.
-
 * Open the browser and go to:
 ```
 localhost:8080
 ```
 
-* Go to Manage hardware interfaces
+* Go to ManageHardwareInterfaces
 * Your robot hardware interface should be ON.
-* If you are using the MIR100 hardware interface, click on the yellow gear.
 * Check that the isRobotConnected parameter is set to ON. This means the connection to the robot was successful
 
-* Open the Reality Editor application on the phone
+* Open the Vuforia Spatial Toolbox application on the phone, POINTING AT THE FLOOR (or surface where your robot will be moving on). The first time the application sees a surface, it will register this surface as the floor. We are currently in the process of implementing user feedback for this. For now, just make sure that you are pointing at the floor when you turn on the application.
 * On the side menu on the phone, click on the configuration gear
 * Go to 'Found Objects'
 
@@ -258,7 +219,16 @@ If your object is not on this list, something went wrong. Check out our troubles
 If your object is on the list, point with the phone at your physical object (aka your robot).
 If your object target works, the main UI of the motion tool should show up on the device.
 
-![Image of VST tool](../../resources/img/mir.PNG) 
+![Image of VST tool](../../resources/img/legoBoost_tracked.jpg)
+
+Now you can point on the floor and tap at any new position where you want a new checkpoint. You will see how a path gets created as you add more checkpoints on the floor.
+Once your path is finished. Connect a button to the first checkpoint.
+
+![Image of VST tool](../../resources/img/legoBoost_button.jpg)
+
+ When you activate this button, the robot will start following the path.
+ 
+ ![Image of VST tool](../../resources/gifs/boost.gif)
 
 ### Authors
 
