@@ -113,7 +113,7 @@ With the server running, follow this steps on the VST Server interface on your b
 
 The interface will ask you to create a Vuforia Target with the name provided. 
 
-![Image of Lego Boost in server](../../resources/img/legoBoost_object.png) 
+![Image of Lego Boost in server](../../resources/img/legoboost_object.png) 
 
 This name (that follows the pattern: legoBoost+ABunchOfLettersAndNumbers) is the name you need when generating your Vuforia Target.
 
@@ -179,7 +179,7 @@ node server
 Go back to the browser interface, to ManageHardwareInterfaces and click on the yellow gear next to legoBoost for configuration.
 You will see the configuration parameters for the Lego Boost robot as follows:
 
-![Image of VST tool](../../resources/img/legoBoost_config.png) 
+![Image of server interface](../../resources/img/legoboost_config.png) 
 
 Modify the parameters to match your configuration.
 Make sure the object name is the same one as the object you have created ('legoBoost').
