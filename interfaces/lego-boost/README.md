@@ -10,7 +10,7 @@ permalink: /docs/vuforia-spatial-robotic-addon/interfaces/lego-boost/README
 
 This is a reference to build a [**Vuforia Spatial Toolbox** (VST)](https://forum.spatialtoolbox.vuforia.com ) path planning prototype using robotic interfaces for a Lego Boost robot. 
 This is based on our [**Kinetic AR** UX framework](https://dl.acm.org/doi/pdf/10.1145/3334480.3382814) and it works with two components:
-* **[Robotic Addon Interface](../../README.md)** [To connect to the robot hardware]
+* **[Robotic Addon Interface](../../)** [To connect to the robot hardware]
 * **Motion Tool** [AR UI when looking at the robot with your mobile device]
 
 ![Image of VST tool](../../resources/gifs/boost.gif)
@@ -234,11 +234,11 @@ Once your path is finished. Connect a button to the first checkpoint.
 
 * **[Anna Fuste](https://github.com/afustePTC)**
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/ptcrealitylab/vuforia-spatial-robotic-addon/contributors) who participated in this project.
 
 ### License
 
-This project is licensed under the MPL 2.0 License - see the [LICENSE](../../LICENSE) file for details
+This project is licensed under the MPL 2.0 License - see the [LICENSE](https://github.com/ptcrealitylab/vuforia-spatial-robotic-addon/blob/master/LICENSE) file for details
 
 ### Acknowledgments
 
