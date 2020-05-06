@@ -8,12 +8,12 @@ permalink: /docs/vuforia-spatial-robotic-addon/interfaces/lego-boost/README
 
 ## Lego Boost Kinetic AR Prototyping
 
+![Image of VST tool](../../resources/gifs/boost.gif)
+
 This is a reference to build a [**Vuforia Spatial Toolbox** (VST)](https://forum.spatialtoolbox.vuforia.com ) path planning prototype using robotic interfaces for a Lego Boost robot. 
 This is based on our [**Kinetic AR** UX framework](https://dl.acm.org/doi/pdf/10.1145/3334480.3382814) and it works with two components:
 * **[Robotic Addon Interface](../../)** [To connect to the robot hardware]
 * **Motion Tool** [AR UI when looking at the robot with your mobile device]
-
-![Image of VST tool](../../resources/gifs/boost.gif)
 
 It allows a connection to the robot and a spatial synchronization 
 between the robot coordinate system and the Vuforia groundplane coordinate system. 
