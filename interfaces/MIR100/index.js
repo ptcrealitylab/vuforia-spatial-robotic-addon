@@ -156,7 +156,7 @@ let initialSync = false;
 
 function startHardwareInterface() {
     
-    console.log('MIR: Allow robot Connection? ', enableMIRConnection);
+    console.log('MIR: Start Robotic Addon - Allow robot Connection? ', enableMIRConnection);
 
     server.enableDeveloperUI(true);
     server.removeAllNodes(objectName, 'kineticAR'); // We remove all existing nodes from the Frame
@@ -606,7 +606,6 @@ function updateEvery(i, time) {
 }
 
 server.addEventListener("initialize", function () {
-    console.log('MIR: VST Server has been initialized.');
     if (exports.enabled) startHardwareInterface();
 });
 server.addEventListener("shutdown", function () {

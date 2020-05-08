@@ -186,7 +186,7 @@ let initialSync = false;
 
 function startHardwareInterface() {
     
-    console.log('LEGO-BOOST: Allow robot Connection? ', enableRobotConnection);
+    console.log('LEGO-BOOST: Start Robotic Addon - Allow robot Connection? ', enableRobotConnection);
 
     server.enableDeveloperUI(true);
     server.removeAllNodes(objectName, 'kineticAR'); // We remove all existing nodes from the Frame
@@ -196,7 +196,7 @@ function startHardwareInterface() {
     console.log('LEGO-BOOST: Setting default tool to motion');
     server.setTool(objectName, 'kineticAR', 'motion', __dirname);   // Set motion tool as the default tool for lego-boost
 
-    server.addNode(objectName, "kineticAR", "kineticNode1", "storeData");     // Node for realtime robot position data
+    server.addNode(objectName, "kineticAR", "kineticNode1", "storeData");     // Node for realtime checkpoint updates
     server.addNode(objectName, "kineticAR", "kineticNode2", "storeData");     // Node for the data path. Follow Checkpoints
     server.addNode(objectName, "kineticAR", "kineticNode3", "storeData");     // Node for receiving AR status
     server.addNode(objectName, "kineticAR", "kineticNode4", "storeData");     // Node for cleaning the path
@@ -583,7 +583,6 @@ function updateEvery(i, time) {
 }
 
 server.addEventListener("initialize", function () {
-    console.log('LEGO-BOOST: VST Server has been initialized.');
     if (exports.enabled) startHardwareInterface();
 });
 server.addEventListener("shutdown", function () {
