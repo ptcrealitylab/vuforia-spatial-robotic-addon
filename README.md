@@ -14,11 +14,9 @@ These hardware interfaces allow the connection to external hardware devices such
 
 ![Image of VST tool](resources/gifs/mir.gif)
 
-Currently, our system contains a sample hardware interface for 1 robotic system:
+Currently, our system contains robotic addons for 2 hardware systems:
 * **[MIR100 AGV](https://www.mobile-industrial-robots.com/en/solutions/robots/mir100/)**
-
-> We are in the process of developing a new interface for the **[Lego Boost](https://www.lego.com/en-us/themes/boost)**. Stay tuned!
-
+* **[Lego Boost](https://www.lego.com/en-us/themes/boost)**
 
 ### Platform Architecture
 
