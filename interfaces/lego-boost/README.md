@@ -122,6 +122,12 @@ Go to the Target Manager and add a new target. This target must be a Vuforia tar
 
 ![Image of robot target](../../resources/img/legoboost_imagetarget.jpg)
 
+When you create your target it is very important that you follow the direction convention used by the interface.
+You must ensure that the top part of the image on the Vuforia Developer Portal is directed towards the front of your physical robot.
+If this is not correct, the robot will not follow the path properly.
+
+![Image of robot target](../../resources/img/targetDirection.jpg)
+
 When prompted, add the name you got from the VST interface (legoBoost+ABunchOfLettersAndNumbers).
 
 Download the target when processed. 
@@ -133,7 +139,7 @@ Once you have downloaded your object/image target follow this steps on the VST S
 
 On the 'Add Target' interface:
 * Drop zip file or separate files (dat, xml and jpg) to the drop zone. The [OFF] button should turn to [ON]
-* Click on 'Add Frame'. Give this frame the following name: 'kineticAR'
+* Click on 'Add Tool'. Give this tool the following name: 'kineticAR'
 
 At this point, if you go to your file system and navigate to the spatialToolbox folder, you should see that a folder has been created for your object and your tool.
 
@@ -141,10 +147,9 @@ At this point, if you go to your file system and navigate to the spatialToolbox 
 Documents/spatialToolbox/legoBoost/kineticAR
 ```
 
-In this tool folder you will host the code that will generate the KineticAR tool once you detect your robot.
+Make sure that this folder has been generated. In this tool folder the system will host the code that will generate the KineticAR tool once you detect your robot.
 By default you will see two files: index.html and bird.png. <br />
-Here, you can develop your own tools to be used when tracking your object.
-
+Alternatively, in this folder, you can develop your own tools to be used when tracking your object.
 For our example on KineticAR, the system will automatically copy the tool from the robotic addon interface. So, on to that:
 
 ### Configure robot

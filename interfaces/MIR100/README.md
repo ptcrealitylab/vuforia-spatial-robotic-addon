@@ -138,7 +138,7 @@ Once you have downloaded your object/image target follow this steps on the VST S
 
 On the 'Add Target' interface:
 * Drop zip file or separate files (dat, xml and jpg) to the drop zone. The [OFF] button should turn to [ON]
-* Click on 'Add Frame'. Give this frame the following name: 'kineticAR'
+* Click on 'Add Tool'. Give this tool the following name: 'kineticAR'
 
 At this point, if you go to your file system and navigate to the spatialToolbox folder, you should see that a folder has been created for your object and your tool.
 
