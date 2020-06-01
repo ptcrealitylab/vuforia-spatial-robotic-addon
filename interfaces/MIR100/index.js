@@ -342,6 +342,7 @@ function nodeReadCallback(data, checkpointIdx, pathIdx){
                     .catch(error => console.error(error));
 
                 mir_mission_interrupted = true;
+                checkpointTriggered.active = 0; // deactivate the checkpoint
 
             } else {        // Checkpoint has changed from active to not active, robot just got here. We have to trigger next checkpoint
                 
