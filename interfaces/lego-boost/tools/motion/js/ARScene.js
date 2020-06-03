@@ -262,7 +262,7 @@ export class ARScene extends EventEmitter{
 
     anchorRobotToGroundPlane(robotMatrix){
 
-        if (this.robotAnchor !== null) this.groundPlaneContainerObj.remove(this.robotAnchor);                         // Remove previous anchor from ground plane
+        if (this.robotAnchor !== null) this.groundPlaneContainerObj.remove(this.robotAnchor);                           // Remove previous anchor from ground plane
         if (this.motionViz !== null) this.motionViz.clearMotionLine();                                                  // Reset motion visualization
 
         this.robotAnchor = new RobotDummy();
@@ -273,25 +273,20 @@ export class ARScene extends EventEmitter{
 
         setMatrixFromArray(this.robotAnchor.matrix, robotMatrix);
         
-        //this.robotAnchor.matrix.setPosition( this.robotDummy.matrix.position );
-        //this.robotAnchor.matrix.setRotation( this.robotDummy.matrix.rotation );
+        THREE.SceneUtils.attach( this.robotAnchor, this.scene, this.groundPlaneContainerObj );                          // This will remove robot dummy from scene and anchor to ground plane
         
-        
-        THREE.SceneUtils.attach( this.robotAnchor, this.scene, this.groundPlaneContainerObj );                         // This will remove robot dummy from scene and anchor to ground plane
+        this.robotAnchor.translateX(80);                                                                                // Set position relative to marker
+        this.robotAnchor.translateY(50);
+        this.robotAnchor.translateZ(50);
 
-        this.robotAnchor.translateY(80);
-        this.robotAnchor.translateZ(-50);
+        this.robotAnchor.rotateX(Math.PI);
         this.robotAnchor.updateMatrix();
         
         /**** Adjust position to center of robot ****/
-        
         this.lastPosition.copy(this.robotAnchor.position);
 
-        /* The robot was scanned as an object target with an offset of 90 degrees
-        * so the forward vector is actually the up vector */
-        
         this.lastDirection.copy(this.robotAnchor.up);
-        this.lastDirection = this.lastDirection.applyQuaternion( this.robotAnchor.quaternion );                        // This gets direction in ground plane coordinates
+        this.lastDirection = this.lastDirection.applyQuaternion( this.robotAnchor.quaternion );                         // This gets direction in ground plane coordinates
 
     }
 
