@@ -322,7 +322,7 @@ function startHardwareInterface() {
         hub = new Hub();
 
         hub.on('connected', function (uuid) {
-            console.log('LEGO-BOOST: I found a device with uuid: '+uuid);
+            console.log('LEGO-BOOST: I found a device with uuid: ' + uuid);
 
             boostUuid = uuid;
 
@@ -339,11 +339,7 @@ function startHardwareInterface() {
                 // 1 - back wheel B
                 // 3 - Head
 
-                //hub.setMotorDegrees(685, boostSpeed, 0, boostUuid);
-                //hub.setMotorDegrees(685, (-1)*boostSpeed, 1, boostUuid);
-
-                hub.setMotorDegrees(10, boostSpeed, 3, boostUuid);
-                hub.setMotorDegrees(-10, boostSpeed, 3, boostUuid);
+                hub.setMotorDegrees(1500, boostSpeed, 16, boostUuid);
             }
             
             if (wheelType === 0){
@@ -448,6 +444,8 @@ function nodeReadCallback(data, checkpointIdx, pathIdx){
                 } else {                                                                            // We reached end of path
 
                     activeCheckpointName = null;
+                    
+                    // Do something here after end of path reached...
 
                 }
             }
