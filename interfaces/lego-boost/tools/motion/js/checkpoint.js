@@ -121,7 +121,7 @@ export class Checkpoint extends THREE.Group {
         const ctx = canvas.getContext('2d');
         canvas.width = canvas.height = 128;
         ctx.fillStyle = 'white';
-        ctx.font = '65px Helvetica';
+        ctx.font = '65px Roboto';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText((index + 1).toString(), canvas.width/2, canvas.height/2);
@@ -192,7 +192,7 @@ export class Checkpoint extends THREE.Group {
         this.canvasAngle.width = 300;
         this.canvasAngle.height = 128;
         ctx.fillStyle = 'white';
-        ctx.font = 'bold 65px Helvetica';
+        ctx.font = '65px Roboto';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
