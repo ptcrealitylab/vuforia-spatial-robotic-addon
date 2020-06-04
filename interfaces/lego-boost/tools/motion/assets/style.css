@@ -1,7 +1,12 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url('./fonts/Roboto-Black.ttf');
+}
+
 body {
   margin: auto;
   color: white;
-  font-family: Arial;
+  font-family: Roboto;
   overflow: hidden;
   background-color: transparent;
 }
