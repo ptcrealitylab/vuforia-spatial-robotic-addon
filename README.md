@@ -18,6 +18,8 @@ Currently, our system contains robotic addons for 2 hardware systems:
 * **[MIR100 AGV](https://www.mobile-industrial-robots.com/en/solutions/robots/mir100/)**
 * **[Lego Boost](https://www.lego.com/en-us/themes/boost)**
 
+But it can be adapted to any other robotic system by developing a custom robotic addon.
+
 ### Platform Architecture
 
 ![Image of VST tool](resources/img/vst_roboticaddons.jpg)
@@ -36,9 +38,19 @@ You can create more robotic addons and more default tools for each one of them.
 
 ### Use the MIR100 robotic addon
 
-In order to use the MIR100 robotic addon, follow the instructions on the [KineticAR tutorial](interfaces/MIR100/README.md).
+If you want to use our existing MIR100 robotic addon, follow the instructions on the [MIR100 KineticAR tutorial](interfaces/MIR100/README.md).
 
 ### Develop new robotic addon
+
+#### Prerequisites
+
+The robot you want to use needs a remote connection and you need to understand the communication protocols involved to:
+
+* Get the robot status (current position/rotation and if it is moving or not)
+* Send a move command to the robot in order to send it to a final position and rotation
+* Steer the robot in realtime [optional]
+ 
+You will also need the [Vuforia](https://developer.vuforia.com/) object target or image target to identify the robot with the mobile device [Later explained]
 
 #### Get Started
 

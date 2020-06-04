@@ -1,15 +1,15 @@
 ---
 layout: doc
-title: KineticAR Prototyping
+title: MIR100 KineticAR Prototyping
 permalink: /docs/vuforia-spatial-robotic-addon/interfaces/MIR100/README
 ---
 
 > IMPORTANT NOTE: Due to the current situation regarding COVID-19, we don't have access to the MIR100 AGV and have not been able to test the last tweaks to the interface. We have worked hard to ensure the correct functionality of the robotic addons but would much appreciate your patience if any bugs are found.
 
 
-## KineticAR Interfaces
+## MIR100 KineticAR Prototyping
 
-This is a reference to build a [**Vuforia Spatial Toolbox** (VST)](https://forum.spatialtoolbox.vuforia.com ) KineticAR prototype using robotic interfaces for any moving robot in 2D or 3D. 
+This is a reference to build a [**Vuforia Spatial Toolbox** (VST)](https://forum.spatialtoolbox.vuforia.com ) KineticAR prototype using robotic interfaces for an [MIR100](https://www.mobile-industrial-robots.com/en/solutions/robots/mir100/) Automated Guided Vehicle. 
 This is based on our [**Kinetic AR** UX framework](https://dl.acm.org/doi/abs/10.1145/3371382.3378394) and it works with two components:
 * **[Robotic Addon Interface](../../README.md)** [To connect to the robot hardware]
 * **[Motion Tool](tools/motion/motionTool.md)** [AR UI when looking at the robot with your mobile device]
@@ -17,7 +17,7 @@ This is based on our [**Kinetic AR** UX framework](https://dl.acm.org/doi/abs/10
 ![Image of VST tool](../../resources/gifs/mir.gif)
 
 It allows a connection to the robot and a full spatial synchronization 
-between the robot coordinate system and the Vuforia groundplane coordinate system. 
+between the robot coordinate system and the [Vuforia Groundplane](https://library.vuforia.com/articles/Training/ground-plane-guide.html) coordinate system. 
 It also allows for path planning and motion visualization in AR in real-time.
 
 ### Getting Started
@@ -25,20 +25,22 @@ It also allows for path planning and motion visualization in AR in real-time.
 These instructions will explain how to setup the Kinetic AR robotic addons and tools. 
 You will have to clone or download the code for the VST repositories as explained later.
 
-This tutorial is based on the interface built for an [MIR100](https://www.mobile-industrial-robots.com/en/solutions/robots/mir100/) Automated Guided Vehicle. But can be adapted to any other robot.
+This tutorial explains the interface built for an [MIR100](https://www.mobile-industrial-robots.com/en/solutions/robots/mir100/) Automated Guided Vehicle. But can be adapted to any other robot.
 The MIR example makes use of a Rest API and WebSockets in order to communicate with the AGV. 
-You will need to adapt the code to be able to communicate with your specific hardware.
+If you have a different robotic system, you will need to adapt the code to be able to communicate with your specific hardware.
 
-#### Prerequisites
+### Setup MIR100
 
-The robot you want to use needs a remote connection and you need to understand the communication protocols involved to:
+Before using the Vuforia Spatial Toolbox, you need to setup the MIR100 with some specific missions.
+This will allow the VST system to send commands to the MIR100 in order to perform the path planning.
 
-* Get the robot status (current position/rotation and if it is moving or not)
-* Send a move command to the robot in order to send it to a final position and rotation
-* Steer the robot in realtime [optional]
- 
+Open the MIR100 browser interface and create a new mission called 'Move To Coordinate' of type Move to coordinate. 
+This mission defines a X, Y position and orientation on the map the robot should move to.
+You will have to create three variables for this mmission and give them the following names:
 
-You will also need the [Vuforia](https://developer.vuforia.com/) object target or image target to identify the robot with the mobile device [Later explained]
+* 'positionX' - X position
+* 'positionY' - Y position
+* 'orientation' - orientation
 
 ### Download code
 
@@ -132,25 +134,14 @@ Go to the Target Manager and add a new target. When prompted, add the name you g
 Download the target when processed. 
 When prompted to select a development platform, select the option Android Studio, Xcode or Visual Studio.
 
-#### Creating a VST tool through the VST server
+#### Adding trackable object to VST server
 
 Once you have downloaded your object/image target follow this steps on the VST Server interface on your browser:
 
 On the 'Add Target' interface:
 * Drop zip file or separate files (dat, xml and jpg) to the drop zone. The [OFF] button should turn to [ON]
-* Click on 'Add Tool'. Give this tool the following name: 'kineticAR'
 
-At this point, if you go to your file system and navigate to the spatialToolbox folder, you should see that a folder has been created for your object and your tool.
-
-```
-Documents/spatialToolbox/yourObjectName/kineticAR
-```
-
-In this frame folder you will host the code that will generate the KineticAR tool once you detect your robot.
-By default you will see two files: index.html and bird.png. <br />
-Here, you can develop your own tools to be used when tracking your object.
-
-For our example on KineticAR, the system will automatically copy the tool from the robotic addon interface. So, on to that:
+Restart the server through the terminal
 
 #### Initializing your robotic addon interface
 
