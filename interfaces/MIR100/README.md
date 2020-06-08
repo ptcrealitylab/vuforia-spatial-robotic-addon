@@ -9,15 +9,15 @@ permalink: /docs/vuforia-spatial-robotic-addon/interfaces/MIR100/README
 
 ## MIR100 KineticAR Prototyping
 
+![Image of VST tool](../../resources/gifs/mir.gif)
+
 This is a reference to build a [**Vuforia Spatial Toolbox** (VST)](https://forum.spatialtoolbox.vuforia.com ) KineticAR prototype using robotic interfaces for an [MIR100](https://www.mobile-industrial-robots.com/en/solutions/robots/mir100/) Automated Guided Vehicle. 
-This is based on our [**Kinetic AR** UX framework](https://dl.acm.org/doi/abs/10.1145/3371382.3378394) and it works with two components:
+This is based on our [**Kinetic AR** UX framework](https://dl.acm.org/doi/abs/10.1145/3334480.3382814) and it works with two components:
 * **[Robotic Addon Interface](../../README.md)** [To connect to the robot hardware]
 * **[Motion Tool](tools/motion/motionTool.md)** [AR UI when looking at the robot with your mobile device]
 
-![Image of VST tool](../../resources/gifs/mir.gif)
-
-It allows a connection to the robot and a full spatial synchronization 
-between the robot coordinate system and the [Vuforia Groundplane](https://library.vuforia.com/articles/Training/ground-plane-guide.html) coordinate system. 
+The system creates a connection to the robot. A full spatial synchronization 
+between the robot coordinate system and the [Vuforia Groundplane](https://library.vuforia.com/articles/Training/ground-plane-guide.html) coordinate system is enabled. 
 It also allows for path planning and motion visualization in AR in real-time.
 
 ### Getting Started
@@ -25,7 +25,7 @@ It also allows for path planning and motion visualization in AR in real-time.
 These instructions will explain how to setup the Kinetic AR robotic addons and tools. 
 You will have to clone or download the code for the VST repositories as explained later.
 
-This tutorial explains the interface built for an [MIR100](https://www.mobile-industrial-robots.com/en/solutions/robots/mir100/) Automated Guided Vehicle. But can be adapted to any other robot.
+This tutorial explains the interface built for an [MIR100](https://www.mobile-industrial-robots.com/en/solutions/robots/mir100/) Automated Guided Vehicle, but can be adapted to any other robot.
 The MIR example makes use of a Rest API and WebSockets in order to communicate with the AGV. 
 If you have a different robotic system, you will need to adapt the code to be able to communicate with your specific hardware.
 
@@ -36,7 +36,7 @@ This will allow the VST system to send commands to the MIR100 in order to perfor
 
 Open the MIR100 browser interface and create a new mission called 'Move To Coordinate' of type Move to coordinate. 
 This mission defines a X, Y position and orientation on the map the robot should move to.
-You will have to create three variables for this mmission and give them the following names:
+You will have to create three variables for this mission and give them the following names:
 
 * 'positionX' - X position
 * 'positionY' - Y position
@@ -44,7 +44,7 @@ You will have to create three variables for this mmission and give them the foll
 
 ### Download code
 
-1. Download the [vuforia-spatial-edge-server](https://github.com/ptcrealitylab/vuforia-spatial-edge-server) code and place it in your Development folder on your computer.
+1. Download the [vuforia-spatial-edge-server](https://github.com/ptcrealitylab/vuforia-spatial-edge-server) code and place it in your development folder on your computer.
 
 2. Download the [vuforia-spatial-robotic-addon](https://github.com/ptcrealitylab/vuforia-spatial-robotic-addon) code and place it in the following folder:
 
@@ -145,8 +145,8 @@ Restart the server through the terminal
 
 #### Initializing your robotic addon interface
 
-If you want to use the existing robotic addons (MIR100) with the default 'kineticAR' tool, skip to Testing.
-If you want to create a new robotic addon, continue reading.
+If you want to use the existing MIR100 robotic addons, skip to 'Configure robot'.
+However, if you want to learn how to create a new robotic addon for a different robotic system, continue reading.
 
 In order to create your own robotic addon interface, access the following folder:
 
