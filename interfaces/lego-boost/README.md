@@ -12,7 +12,7 @@ permalink: /docs/vuforia-spatial-robotic-addon/interfaces/lego-boost/README
 
 This is a reference to build a [**Vuforia Spatial Toolbox** (VST)](https://forum.spatialtoolbox.vuforia.com ) path planning prototype using robotic interfaces for a Lego Boost robot. 
 This is based on our [**Kinetic AR** UX framework](https://dl.acm.org/doi/pdf/10.1145/3334480.3382814) and it works with two components:
-* **[Robotic Addon Interface](../../)** [To connect to the robot hardware]
+* **[Robotic Addon Interface](../../)** [To connect to the robot hardware via BLE]
 * **Motion Tool** [AR UI when looking at the robot with your mobile device]
 
 It allows a connection to the robot and a spatial synchronization 
@@ -212,7 +212,8 @@ localhost:8080
 
 * Go to ManageHardwareInterfaces
 * Your robot hardware interface should be ON.
-* Check that the isRobotConnected parameter is set to ON. This means the connection to the robot was successful
+* TURN ON THE LEGO BOOST (through the main physical green button)
+* Check that the isRobotConnected parameter updates to ON. This means the BLE connection to the robot was successful
 
 * Open the Vuforia Spatial Toolbox application on the phone, POINTING AT THE FLOOR (or surface where your robot will be moving on). The first time the application sees a surface, it will register this surface as the floor. We are currently in the process of implementing user feedback for this. For now, just make sure that you are pointing at the floor when you turn on the application.
 * On the side menu on the phone, click on the configuration gear
@@ -231,9 +232,9 @@ Once your path is finished. Connect a button to the first checkpoint.
 
 ![Image of VST tool](../../resources/img/legoBoost_button.jpg)
 
- When you activate this button, the robot will start following the path.
+When you activate this button, the robot will start following the path.
  
- ![Image of VST tool](../../resources/gifs/boost.gif)
+![Image of VST tool](../../resources/gifs/boost.gif)
 
 ### Authors
 
