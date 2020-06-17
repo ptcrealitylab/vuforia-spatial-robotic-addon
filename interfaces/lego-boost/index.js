@@ -51,7 +51,7 @@ exports.configurable = true;
 const Hub = require('wedoboostpoweredup');
 const { CustomMaths } = require('./customMaths');
 
-let objectName = '';
+let objectName = 'lego-boost';
 let boostSpeed = 10;    // (0 - 100) motor power
 let wheelType = 0;
 let wheelDiameter = 0;
@@ -77,7 +77,7 @@ if (exports.enabled) {               // These settings will be exposed to the we
                 value: settings('objectName'),
                 type: 'text',
                 disabled: false,
-                default: 'legoBoost',
+                default: 'lego-boost',
                 helpText: 'The name of the object that connects to this hardware interface.'
             },
             boostSpeed: {
@@ -90,7 +90,7 @@ if (exports.enabled) {               // These settings will be exposed to the we
             wheelType: {
                 value: settings('wheelType'),
                 type: 'number',
-                default: 0,
+                default: 1,
                 disabled: false,
                 helpText: 'The type of wheel. For regular wheel (0). For tank wheel (1).'
             },

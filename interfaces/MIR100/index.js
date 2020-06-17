@@ -53,9 +53,9 @@ const { CustomMaths } = require('./customMaths');
 exports.enabled = settings('enabled');
 exports.configurable = true;
 
-let objectName = '';
-let hostIP = '';
-let port = '';
+let objectName = 'mir100';
+let hostIP = '10.10.10.30';
+let port = '39320';
 let isRobotConnected = false;
 let enableMIRConnection = false;     // For debugging purposes, deactivate from browser if you just want to develop on the interface without the robot connection
 
@@ -88,6 +88,7 @@ if (exports.enabled) {               // These settings will be exposed to the we
             objectName: {
                 value: settings('objectName'),
                 type: 'text',
+                default: 'mir100',
                 disabled: false,
                 helpText: 'The name of the object that connects to this hardware interface.'
             },
@@ -101,6 +102,7 @@ if (exports.enabled) {               // These settings will be exposed to the we
             enableMIRConnection: {
                 value: settings('enableMIRConnection'),                         // Variable type
                 type: 'boolean',                                                // Default value assigned to this variable
+                default: false,
                 disabled: false,                                                // If this variable should be editable or not
                 helpText: 'Do you want to enable the connection of the robot?'  // Text that will appear on the web frontend
             }
