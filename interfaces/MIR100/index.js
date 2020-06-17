@@ -53,17 +53,23 @@ const { CustomMaths } = require('./customMaths');
 exports.enabled = settings('enabled');
 exports.configurable = true;
 
-let objectName = '';
-let hostIP = '';
-let port = '';
+let objectName = 'MIR';
+let hostIP = '10.10.10.30';
+let port = 39320;
 let isRobotConnected = false;
-let enableMIRConnection = false;     // For debugging purposes, deactivate from browser if you just want to develop on the interface without the robot connection
+let enableMIRConnection = true;     // For debugging purposes, deactivate from browser if you just want to develop on the interface without the robot connection
 
 if (exports.enabled) {               // These settings will be exposed to the webFrontend to potentially be modified
 
     setup();
 
     console.log('MIR: Settings loaded: ', objectName, hostIP, port, isRobotConnected, enableMIRConnection);
+
+    server.setHardwareInterfaceSettings('MIR100', exports.settings, null, function(successful, error) {
+        if (error) {
+            console.log('MIR100: error persisting settings', error);
+        }
+    });
     
     function setup() {
         
@@ -72,36 +78,38 @@ if (exports.enabled) {               // These settings will be exposed to the we
          */
         exports.settings = {
             robotIp: {
-                value: settings('robotIp'),
+                value: settings('robotIp', '10.10.10.30'),
                 type: 'text',
-                default: '10.10.10.30',
                 disabled: false,
+                default: '10.10.10.30',
                 helpText: 'The IP address of the MIR100 you want to connect to.'
             },
             robotPort: {
-                value: settings('robotPort'),
+                value: settings('robotPort', 39320),
                 type: 'number',
-                default: 39320,
                 disabled: false,
+                default: 39320,
                 helpText: 'The port of the MIR100 Gateway.'
             },
             objectName: {
-                value: settings('objectName'),
+                value: settings('objectName', 'MIR'),
                 type: 'text',
                 disabled: false,
+                default: 'MIR',
                 helpText: 'The name of the object that connects to this hardware interface.'
             },
             isRobotConnected: {
-                value: settings('isRobotConnected'),
+                value: settings('isRobotConnected', false),
                 type: 'boolean',                                                // Variable type
-                default: false,                                                 // Default value assigned to this variable
                 disabled: true,                                                 // If this variable should be editable or not
+                default: false,                                                 // Default value assigned to this variable
                 helpText: 'Is the robot currently connected?'                   // Text that will appear on the web frontend
             },
             enableMIRConnection: {
-                value: settings('enableMIRConnection'),                         // Variable type
+                value: settings('enableMIRConnection', true),                   // Variable type
                 type: 'boolean',                                                // Default value assigned to this variable
                 disabled: false,                                                // If this variable should be editable or not
+                default: true,
                 helpText: 'Do you want to enable the connection of the robot?'  // Text that will appear on the web frontend
             }
         };
