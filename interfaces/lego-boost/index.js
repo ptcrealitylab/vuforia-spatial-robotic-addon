@@ -52,16 +52,19 @@ const Hub = require('wedoboostpoweredup');
 const { CustomMaths } = require('./customMaths');
 
 let objectName = 'lego-boost';
-let boostSpeed = 10;                    // (0 - 100) motor power
+// (0 - 100) motor power
+let boostSpeed = 10;
 let wheelType = 0;
 let wheelDiameter = 0;
 let wheelSeparation = 0;
 let wheelA_driftOffset = 0;
 let wheelB_driftOffset = 0;
 let isRobotConnected = false;
-let enableRobotConnection = true;       // For debugging purposes, deactivate from browser if you just want to develop on the interface without the robot connection
+// For debugging purposes, deactivate from browser if you just want to develop on the interface without the robot connection
+let enableRobotConnection = true;
 
-if (exports.enabled) {                  // These settings will be exposed to the webFrontend to potentially be modified
+// These settings will be exposed to the webFrontend to potentially be modified
+if (exports.enabled) {
     
     setup();
     
