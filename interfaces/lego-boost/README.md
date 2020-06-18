@@ -188,7 +188,7 @@ You will see the configuration parameters for the Lego Boost robot as follows:
 
 Modify the parameters to match your configuration.
 Make sure the object name is the same one as the object you have created ('legoBoost').
-Finally, set enableMIRConnection to true, so that the software tries to connect to the robot.
+Finally, set enableRobotConnection to true, so that the software tries to connect to the robot.
 
 Once this is all setup, stop your server. Go to the next section: Testing.
 

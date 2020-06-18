@@ -52,20 +52,29 @@ const Hub = require('wedoboostpoweredup');
 const { CustomMaths } = require('./customMaths');
 
 let objectName = 'lego-boost';
-let boostSpeed = 10;    // (0 - 100) motor power
+// (0 - 100) motor power
+let boostSpeed = 10;
 let wheelType = 0;
 let wheelDiameter = 0;
 let wheelSeparation = 0;
 let wheelA_driftOffset = 0;
 let wheelB_driftOffset = 0;
 let isRobotConnected = false;
-let enableRobotConnection = false;     // For debugging purposes, deactivate from browser if you just want to develop on the interface without the robot connection
+// For debugging purposes, deactivate from browser if you just want to develop on the interface without the robot connection
+let enableRobotConnection = true;
 
-if (exports.enabled) {               // These settings will be exposed to the webFrontend to potentially be modified
-
+// These settings will be exposed to the webFrontend to potentially be modified
+if (exports.enabled) {
+    
     setup();
-
+    
     console.log('LEGO-BOOST: Settings loaded: ', objectName, isRobotConnected, enableRobotConnection);
+    
+    server.setHardwareInterfaceSettings('lego-boost', exports.settings, null, function(successful, error) {
+        if (error) {
+            console.log('LEGO-BOOST: error persisting settings', error);
+        }
+    });
     
     function setup() {
         
@@ -74,66 +83,66 @@ if (exports.enabled) {               // These settings will be exposed to the we
          */
         exports.settings = {
             objectName: {
-                value: settings('objectName'),
+                value: settings('objectName', 'lego-boost'),
                 type: 'text',
                 disabled: false,
                 default: 'lego-boost',
                 helpText: 'The name of the object that connects to this hardware interface.'
             },
             boostSpeed: {
-                value: settings('boostSpeed'),
+                value: settings('boostSpeed', 10),
                 type: 'number',
-                default: 10,
                 disabled: false,
+                default: 10,
                 helpText: 'Lego Boost Speed ranging from 0-100 motor power'
             },
             wheelType: {
-                value: settings('wheelType'),
+                value: settings('wheelType', 0),
                 type: 'number',
-                default: 1,
                 disabled: false,
+                default: 0,
                 helpText: 'The type of wheel. For regular wheel (0). For tank wheel (1).'
             },
             wheelDiameter: {
-                value: settings('wheelDiameter'),
+                value: settings('wheelDiameter', 0.03175),
                 type: 'number',
-                default: 0.03175,
                 disabled: false,
+                default: 0.03175,
                 helpText: 'Wheel diamater for this particular robot.'
             },
             wheelSeparation: {
-                value: settings('wheelSeparation'),
+                value: settings('wheelSeparation', 0.066675),
                 type: 'number',
-                default: 0.066675,
                 disabled: false,
+                default: 0.066675,
                 helpText: 'Distance from wheel to wheel.'
             },
             wheelA_driftOffset: {
-                value: settings('wheelA_driftOffset'),
+                value: settings('wheelA_driftOffset', 7),
                 type: 'number',
-                default: 7,
                 disabled: false,
+                default: 7,
                 helpText: 'Drift offset considering inertia, floor friction and motor power variations for wheel A.'
             },
             wheelB_driftOffset: {
-                value: settings('wheelB_driftOffset'),
+                value: settings('wheelB_driftOffset', 5),
                 type: 'number',
-                default: 5,
                 disabled: false,
+                default: 5,
                 helpText: 'Drift offset considering inertia, floor friction and motor power variations for wheel B.'
             },
             isRobotConnected: {
-                value: settings('isRobotConnected'),
+                value: settings('isRobotConnected', false),
                 type: 'boolean',                                                // Variable type
-                default: false,                                                 // Default value assigned to this variable
                 disabled: true,                                                 // If this variable should be editable or not
+                default: false,                                                 // Default value assigned to this variable
                 helpText: 'Is the robot currently connected?'                   // Text that will appear on the web frontend
             },
             enableRobotConnection: {
-                value: settings('enableRobotConnection'),                         // Variable type
+                value: settings('enableRobotConnection', true),                         // Variable type
                 type: 'boolean',                                                // Default value assigned to this variable
                 disabled: false,                                                // If this variable should be editable or not
-                default: false,
+                default: true,
                 helpText: 'Do you want to enable the connection of the robot?'  // Text that will appear on the web frontend
             }
         };
