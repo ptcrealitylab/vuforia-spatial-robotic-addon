@@ -83,7 +83,7 @@ if (exports.enabled) {                  // These settings will be exposed to the
                 value: settings('objectName', 'lego-boost'),
                 type: 'text',
                 disabled: false,
-                default: 'legoBoost',
+                default: 'lego-boost',
                 helpText: 'The name of the object that connects to this hardware interface.'
             },
             boostSpeed: {

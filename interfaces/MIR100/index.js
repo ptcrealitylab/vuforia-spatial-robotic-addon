@@ -56,6 +56,7 @@ exports.configurable = true;
 let objectName = 'MIR';
 let hostIP = '10.10.10.30';
 let port = 39320;
+
 let isRobotConnected = false;
 let enableMIRConnection = true;     // For debugging purposes, deactivate from browser if you just want to develop on the interface without the robot connection
 
@@ -94,6 +95,7 @@ if (exports.enabled) {               // These settings will be exposed to the we
             objectName: {
                 value: settings('objectName', 'MIR'),
                 type: 'text',
+                default: 'mir100',
                 disabled: false,
                 default: 'MIR',
                 helpText: 'The name of the object that connects to this hardware interface.'
@@ -108,6 +110,7 @@ if (exports.enabled) {               // These settings will be exposed to the we
             enableMIRConnection: {
                 value: settings('enableMIRConnection', true),                   // Variable type
                 type: 'boolean',                                                // Default value assigned to this variable
+                default: false,
                 disabled: false,                                                // If this variable should be editable or not
                 default: true,
                 helpText: 'Do you want to enable the connection of the robot?'  // Text that will appear on the web frontend
