@@ -311,7 +311,7 @@
     };
 
     function init() {
-        console.log(realityServer.hardwareInterface.settings);
+        console.log('SETTINGS: ', realityServer.hardwareInterface.settings);
         defaultSettings = JSON.parse(JSON.stringify(realityServer.hardwareInterface.settings));
 
         realityServer.render();
