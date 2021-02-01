@@ -45,6 +45,6 @@
     "three-orbit-controls": "^82.1.0",
     "three.meshline": "^1.2.0",
     "watchify": "^3.11.1",
-    "wedoboostpoweredup": "^2.1.4"
+    "wedoboostpoweredup": "^2.1.6"
   }
 }
