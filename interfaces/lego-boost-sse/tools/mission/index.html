@@ -1,0 +1,283 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Default UI</title>
+    <script src="object.js"></script>
+    <script src="objectDefaultFiles/gl-worker.js"></script>
+    <script src="resources/three.js"></script>
+    <script src="resources/SceneUtils.js"></script>
+</head>
+<body>
+<!--<img src="bird.png" style="width: 400px; height: 400px; background-color: rgba(0,0,0,0.5)" alt=""/>
+<div id="pathDisplay" style="position: absolute; left: 0; top: 0; font-family: 'Helvetica Neue', Helvetica, Arial,
+sans-serif; font-size: 28px; color: white; padding: 32px;">
+
+</div>-->
+
+<script>
+
+    let realRenderer, renderer;
+    var camera, scene;
+    var mainContainerObj, groundplaneContainerObj;
+    var rendererWidth = screen.height;
+    var rendererHeight = screen.width;
+    var aspectRatio = rendererWidth / rendererHeight;
+    let cube;
+
+    var isProjectionMatrixSet = false, isGroundPlaneFound = false;
+
+    let spatialInterface = new SpatialInterface();
+    spatialInterface.useWebGlWorker();
+
+    
+    function main() {
+        
+        realRenderer = new THREE.WebGLRenderer({alpha: true});
+        realRenderer.setPixelRatio(window.devicePixelRatio);
+        realRenderer.setSize(rendererWidth, rendererHeight);
+        realGl = realRenderer.getContext();
+
+        // create a fullscreen webgl renderer for the threejs content and add to the dom
+        renderer = new THREE.WebGLRenderer({context: gl, alpha: true});
+        //renderer.setPixelRatio( window.devicePixelRatio );
+        renderer.setSize(rendererWidth, rendererHeight);
+        //document.body.appendChild( renderer.domElement );
+
+        // create a threejs camera and scene
+        camera = new THREE.PerspectiveCamera(70, aspectRatio, 1, 1000);
+        scene = new THREE.Scene();
+
+        // create a parent 3D object to contain all the three js objects
+        // we can apply the marker transform to this object and all of its
+        // children objects will be affected
+        mainContainerObj = new THREE.Object3D();
+        mainContainerObj.matrixAutoUpdate = false;
+        mainContainerObj.name = 'mainContainerObj';
+        scene.add(mainContainerObj);
+
+        // Create Ground Plane container
+        groundplaneContainerObj = new THREE.Object3D();
+        groundplaneContainerObj.matrixAutoUpdate = false;
+        groundplaneContainerObj.name = 'groundPlaneContainer';
+        scene.add(groundplaneContainerObj);
+
+        let geometrycube = new THREE.BoxGeometry( 20, 20, 20 );
+        let material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
+        cube = new THREE.Mesh( geometrycube, material );
+        mainContainerObj.add( cube );
+        cube.position.set(0,0,0);
+
+        let material2 = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+        let cube2 = new THREE.Mesh( geometrycube, material2 ); // green
+        let material3 = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+        let cube3 = new THREE.Mesh( geometrycube, material3 ); // green
+        let material4 = new THREE.MeshBasicMaterial( {color: 0x0000ff} );
+        let cube4 = new THREE.Mesh( geometrycube, material4 ); // green
+        
+        cube.add(cube2);
+        cube.add(cube3);
+        cube.add(cube4);
+
+        cube2.position.set(50,0,0);
+        cube3.position.set(0,50,0);
+        cube4.position.set(0,0,50);
+        
+
+        // light the scene with a combination of ambient and directional white light
+        var ambLight = new THREE.AmbientLight(0x404040);
+        scene.add(ambLight);
+        var dirLight1 = new THREE.DirectionalLight(0xffffff, 1);
+        dirLight1.position.set(100, 100, 100);
+        scene.add(dirLight1);
+        var dirLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
+        dirLight2.position.set(-100, -100, -100);
+        scene.add(dirLight2);
+
+        spatialInterface.onSpatialInterfaceLoaded(function() {
+
+            spatialInterface.getScreenDimensions(function (width, height) {
+                document.body.width = width + 'px';
+                document.body.height = height + 'px';
+                rendererWidth = width;
+                rendererHeight = height;
+                renderer.setSize(rendererWidth, rendererHeight);
+                spatialInterface.changeFrameSize(width, height);
+            });
+
+            spatialInterface.initNode('mission', 'mission', 0, 0);
+            spatialInterface.initNode('storage', 'storeData', 0, 0);
+
+            spatialInterface.subscribeToMatrix();
+            spatialInterface.setFullScreenOn();
+            spatialInterface.setStickyFullScreenOn();
+
+            // whenever we receive new matrices from the editor, update the 3d scene
+            spatialInterface.addMatrixListener(renderScene);
+            spatialInterface.setMoveDelay(10);
+            spatialInterface.addGroundPlaneMatrixListener(groundPlaneCallback);
+            
+            setTimeout(anchorToGroundPlane, 2000);
+            
+        });
+    }
+    
+    function anchorToGroundPlane(){
+        
+        // Anchor object to groundplane
+        THREE.SceneUtils.detach( cube, mainContainerObj, scene );
+        THREE.SceneUtils.attach( cube, scene, groundplaneContainerObj );
+
+        // Send initial position and direction of object to hardware interface
+        
+        let lastDirection = new THREE.Vector3(0,0,0);
+        lastDirection.copy(cube.up);
+        lastDirection = lastDirection.applyQuaternion( cube.quaternion );
+        
+        let data = {
+            position : {x: cube.position.x, y: cube.position.z},
+            direction : {x: lastDirection.x, y: lastDirection.z}
+        
+        };
+        
+        // Send position and direction to hardware interface
+        spatialInterface.writePublicData('storage', 'calibration',  data);
+    }
+    
+    function setMatrixFromArray(matrix, array) {
+        matrix.set( array[0], array[4], array[8], array[12],
+            array[1], array[5], array[9], array[13],
+            array[2], array[6], array[10], array[14],
+            array[3], array[7], array[11], array[15]
+        );
+    }
+
+    let lastProjectionMatrix = null;
+    let lastModelViewMatrix = null;
+
+    function renderScene(modelViewMatrix, projectionMatrix) {
+        lastProjectionMatrix = projectionMatrix;
+        lastModelViewMatrix = modelViewMatrix;
+
+        // CHECK HERE WHEN THIS GETS CALLED
+        //console.log('lastProjectionMatrix: ', lastProjectionMatrix);
+    }
+
+    function groundPlaneCallback(groundPlaneMatrix, projectionMatrix){
+
+        if (isProjectionMatrixSet) {
+
+            // CHECK HERE WHEN THIS GETS CALLED
+            //console.log('GroundPlane: ', groundPlaneMatrix);
+
+            isGroundPlaneFound = true;
+            setMatrixFromArray(groundplaneContainerObj.matrix, groundPlaneMatrix);  // update model view matrix
+        }
+    }
+
+    spatialInterface.addReadListener('mission', function(e) {
+        let data = e;
+        console.log('received mission from node');
+        console.log(data);
+        if (data.mode === 'c' && data.unit === 'path') {
+            //parseData(data);
+        }
+    });
+
+    let done = false;
+
+    // Draw the scene repeatedly
+    render = function(_now) {
+        // now *= 0.001;  // convert to seconds
+        // const deltaTime = now - then;
+        // then = now;
+
+        // cube.rotation.x -= 0.2 * deltaTime;
+        // cube.rotation.y -= 0.2 * deltaTime;
+
+        // only set the projection matrix for the camera 1 time, since it stays the same
+        if (!isProjectionMatrixSet && lastProjectionMatrix && lastProjectionMatrix.length === 16) {
+            setMatrixFromArray(camera.projectionMatrix, lastProjectionMatrix);
+            camera.projectionMatrixInverse.getInverse(camera.projectionMatrix);
+            isProjectionMatrixSet = true;
+        }
+
+        if (isProjectionMatrixSet && lastModelViewMatrix && lastModelViewMatrix.length === 16) {
+
+            // update model view matrix
+            setMatrixFromArray(mainContainerObj.matrix, lastModelViewMatrix);
+            // render the scene
+            mainContainerObj.visible = true;
+
+            if (renderer && scene && camera) {
+                renderer.render(scene, camera);
+
+            }
+
+        }
+
+    };
+
+    /*
+    let currentWorldId = null;
+      
+    spatialInterface.subscribeToWorldId(function(worldId) {
+        currentWorldId = worldId;
+    });
+      
+    setTimeout(function(){
+        spatialInterface.getPositionInWorld(function(worldMatrix, worldId) {
+            if (!worldMatrix || !currentWorldId) {
+                console.warn('tool is not localized against a world object, cannot write position to mission');
+            }
+      
+            console.log('sending position to server: ', 'storage', 'position', worldMatrix);
+            spatialInterface.writePublicData('storage', 'position',  worldMatrix);
+        });
+        }, 3000);
+          
+     
+    
+    function parseData(data) {
+        let worldObjectId = data.value.worldObject;
+        let pathEnvelopeId = data.value.address.tool;
+        let pathMode = data.value.mode; // "PATH" (in future could be "OPTIONS", "NAVIGATION", etc)
+        let path = data.value.path;
+        let listOfPointLists = path.map(function(item) {
+            return item.points;
+        });
+        let positions = [];
+        listOfPointLists.forEach(function(pointsList) {
+            pointsList.forEach(function(point) {
+                positions.push({
+                    speed: point.speed,
+                    x: point.matrix[12] / point.matrix[15],
+                    y: point.matrix[13] / point.matrix[15],
+                    z: point.matrix[14] / point.matrix[15]
+                })
+            });
+        });
+        console.log(worldObjectId, pathEnvelopeId, pathMode, positions);
+
+        
+        let text = '';
+        positions.forEach(function(pos, index) {
+          text += (index+1) + ': (' + pos.x.toFixed(1) + ', ' + pos.y.toFixed(1) + ', ' + pos.z.toFixed(1) + ')' + '<br>';
+          text += 'SPEED: ' + pos.speed + '<br><br>';
+        });
+  
+        // text += '<br>' + 'WORLD: ' + worldObjectId + '<br>' +
+        //   'ENVELOPE: ' + pathEnvelopeId + '<br>' +
+        //   'MODE: ' + pathMode + '<br>';
+  
+        document.getElementById('pathDisplay').innerHTML = text;
+        
+         
+
+    }
+    
+     */
+
+</script>
+</body>
+</html>
