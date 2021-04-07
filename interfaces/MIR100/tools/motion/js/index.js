@@ -140,9 +140,9 @@ spatialInterface.onRealityInterfaceLoaded(function() {
      * This feauture is currently disabled. 
      * This will update the visualization of the paths and checkpoints in external devices.
      */
-    //realityInterface.addReadPublicDataListener("kineticNode2", "pathData", function (data) {
-    //    if (arScene !== undefined) arScene.updateDevices(data);
-    //});
+    spatialInterface.addReadPublicDataListener("kineticNode2", "pathData", function (data) {
+        if (arScene !== undefined) arScene.updateDevices(data);
+    });
 });
 
 function groundPlaneCallback(groundPlaneMatrix, projectionMatrix) {

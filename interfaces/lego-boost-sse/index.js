@@ -310,7 +310,7 @@ function parseData(data) {
             pathData.push({
                 id: pathPointId,
                 objectId: pathPointObjectId,
-                speed: pathPoint.points.speed,
+                speed: point.speed,
                 x: point.matrix[12] / point.matrix[15],
                 y: (-1)*point.matrix[13] / point.matrix[15],
                 z: point.matrix[14] / point.matrix[15]
@@ -318,11 +318,9 @@ function parseData(data) {
         });
     });
     
-    /*
-    Coordinate sync:
+    /* Coordinate sync:
     groundplane x = pathPoint.x
-    groundplane z = - pathPoint.y
-     */
+    groundplane z = - pathPoint.y */
     
     console.log('pathData: ', pathData);
 
