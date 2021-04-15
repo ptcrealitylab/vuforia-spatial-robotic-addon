@@ -19,7 +19,9 @@
     "build-mir100": "browserify interfaces/MIR100/tools/motion/js/index.js -o interfaces/MIR100/tools/motion/assets/bundle.js",
     "watch-mir100": "watchify interfaces/MIR100/tools/motion/js/index.js --debug -o interfaces/MIR100/tools/motion/assets/bundle.js --verbose",
     "build-lego-boost": "browserify interfaces/lego-boost/tools/motion/js/index.js -o interfaces/lego-boost/tools/motion/assets/bundle.js",
-    "watch-lego-boost": "watchify interfaces/lego-boost/tools/motion/js/index.js --debug -o interfaces/lego-boost/tools/motion/assets/bundle.js --verbose"
+    "watch-lego-boost": "watchify interfaces/lego-boost/tools/motion/js/index.js --debug -o interfaces/lego-boost/tools/motion/assets/bundle.js --verbose",
+    "build-fanuc": "browserify interfaces/FANUC_cr15ia/tools/motion/js/index.js -o interfaces/FANUC_cr15ia/tools/motion/assets/bundle.js",
+    "watch-fanuc": "watchify interfaces/FANUC_cr15ia/tools/motion/js/index.js --debug -o interfaces/FANUC_cr15ia/tools/motion/assets/bundle.js --verbose"
   },
   "repository": {
     "type": "git",
