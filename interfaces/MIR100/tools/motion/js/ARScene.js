@@ -97,6 +97,9 @@ export class ARScene extends EventEmitter{
 
         this.firstEdit = true;
 
+        this.realtimePath = false;
+        this.realtimePathCounter = 0;
+
         this.activateCheckpointMode = this.activateCheckpointMode.bind(this);
         this.editCheckpoint = this.editCheckpoint.bind(this);
         this.anchorRobotToGroundPlane = this.anchorRobotToGroundPlane.bind(this);
@@ -456,9 +459,38 @@ export class ARScene extends EventEmitter{
 
     }
 
+    triggerRealtimePath(){
+        this.realtimePath = !this.realtimePath;
+
+        if (this.realtimePath){ // Triggered new realtime path
+            this.createNewPath();
+            this.realtimePathCounter = 0;
+        }
+    }
+
     update() {
 
         this.renderer.render(this.scene, this.camera);  // RENDER SCENE!
+
+        // Generate path of checkpoints in realtime
+        if (this.realtimePath){
+            this.realtimePathCounter += 1;
+
+            if (this.realtimePathCounter > 100){
+
+                console.log('New Checkpoint');
+                this.currentPath.newCheckpoint(this.camera.position);
+                if (this.currentPath.checkpoints.length > 1){
+                    this.currentPath.updateSpline();
+                    this.currentPath.updateFloorSpline();
+                }
+                this.currentPath.updateHeightLinesAndFloorMarks();
+
+                this.realtimePathCounter = 0;
+
+                this.emit('newPathPoint');
+            }
+        }
 
         /*
         // Surface Tracking Feedback

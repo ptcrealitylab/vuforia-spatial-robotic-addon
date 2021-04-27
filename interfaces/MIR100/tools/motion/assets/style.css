@@ -71,6 +71,15 @@ body {
   width: 60px;
   height: 60px;
 }
+#realtimePathButton {
+    position: absolute;
+    background: url('../assets/textures/removePath.png');
+    background-size: 100%;
+    bottom: 10px;
+    left: 10px;
+    width: 60px;
+    height: 60px;
+}
 #closePathButton {
   position: absolute;
   background: url('../assets/textures/closePath.png');

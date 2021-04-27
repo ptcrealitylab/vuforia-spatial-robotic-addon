@@ -11,11 +11,16 @@ mainUI.on('reset', resetTracking);
 mainUI.on('clearPath', clearPath);
 mainUI.on('closePath', closePathCallback);
 mainUI.on('closeAction', closeActionCallback);
+mainUI.on('realtimePath', realtimePath);
 
 /**
  * sets isRobotAnchorSet to false so that
  */
 function resetTracking(){ if (arScene !== undefined) arScene.isRobotAnchorSet = false; }
+
+function realtimePath() {
+    if (arScene !== undefined) arScene.triggerRealtimePath();
+}
 
 function clearPath() {
 
@@ -53,6 +58,8 @@ const arScene = new ARScene();
 arScene.on('robotAnchored', sendRobotPosition);                                                             // Subscribe to send robot position to server
 arScene.on('surfaceTracked', function surfaceTracked(){ mainUI.surfaceTracked(); });                        // Subscribe to give feedback on surface tracked in mainUI
 arScene.clearRenderInDevices();
+
+arScene.on('newPathPoint', pushPathsDataToServer);
 
 // Send robot position and direction in AR to server
 function sendRobotPosition(){
@@ -221,7 +228,7 @@ function pointerUp( eventData ) {
     if (!mainUI.buttonTouch){
         checkpointUI.deactivateCheckpointMenu();
         arScene.closeEdit();
-        arScene.currentPath.closeReset();
+        if (arScene.currentPath) arScene.currentPath.closeReset();
 
         pushPathsDataToServer();
     }

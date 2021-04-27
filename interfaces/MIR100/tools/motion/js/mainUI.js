@@ -23,6 +23,7 @@ export class MainUI {
         this.onCloseAction = this.onCloseAction.bind(this);
         this.onReset = this.onReset.bind(this);
         this.onClearPath = this.onClearPath.bind(this);
+        this.onRealTimePath = this.onRealTimePath.bind(this);
 
         this.initButtons();
 
@@ -108,6 +109,11 @@ export class MainUI {
         //this.domElement.appendChild( this.closePathButton );
          */
 
+        this.realtimePathButton = document.createElement('button');
+        this.realtimePathButton.id = 'realtimePathButton';
+        this.realtimePathButton.addEventListener('pointerdown', this.onRealTimePath, false);
+        this.domElement.appendChild( this.realtimePathButton );
+
     }
 
     surfaceTracked(){
@@ -192,6 +198,13 @@ export class MainUI {
 
         this.emit('closePath');
 
+    }
+
+    onRealTimePath( event ){
+        console.log('START REALTIME PATH');
+        this.activateButtonTouch();
+
+        this.emit('realtimePath');
     }
 
     hideCheckpointPositionMenu(){

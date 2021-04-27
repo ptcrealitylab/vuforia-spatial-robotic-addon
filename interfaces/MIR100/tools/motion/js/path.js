@@ -144,7 +144,7 @@ export class Path extends THREE.Group {
         var lineMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: false });
 
         const positionsArray = this.checkpoints.map(element => {
-            let newPosition = new THREE.Vector3(element.position.x, -50, element.position.z);
+            let newPosition = new THREE.Vector3(element.position.x, 50, element.position.z);
             return newPosition;
         });
 
