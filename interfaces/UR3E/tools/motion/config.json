@@ -1,0 +1,10 @@
+{
+  "kineticARconfig": {
+    "robotName": "wall-e",
+    "rotation": true,
+    "speed": true,
+    "height": true,
+    "position": true,
+    "motionViz": true
+  }
+}

@@ -58,7 +58,6 @@ let hostIP = '10.10.10.30';
 //let port = 39320;
 let port = 9090;
 
-
 let isRobotConnected = false;
 let enableMIRConnection = true;     // For debugging purposes, deactivate from browser if you just want to develop on the interface without the robot connection
 

@@ -82,6 +82,13 @@ class WebSocketInterface {
 
         return yaw * (180 / Math.PI);
     }
+
+    /**
+     * From Unity project. move robot in realtime
+     public void MoveCommand(Vector3 linear, Vector3 angular){
+        string s = @"{""op"":""publish"",""topic"":""/cmd_vel"",""msg"":{""linear"":{""x"":" + linear.x + @",""y"":" + linear.y + @",""z"":" + linear.z + @"},""angular"":{""x"":" + angular.x + @",""y"":" + angular.y + @",""z"":" + angular.z + "}}}";
+        Send(s);
+    }*/
 }
 
 exports.WebSocketInterface = WebSocketInterface;
