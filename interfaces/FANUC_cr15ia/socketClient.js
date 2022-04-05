@@ -35,7 +35,7 @@ class SocketInterface{
             //this.client.write(s);
 
             console.log('Sending');
-            //this.client.write('+350.00:+000.00:+230.00');
+            this.client.write('+350.00:+000.00:+230.00');
 
         }.bind(this));
         

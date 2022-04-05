@@ -54,7 +54,7 @@ let enableURconnection = true;
 let maths = null;
 
 // ROBOT IP
-const hostIP = "10.10.10.158";
+const hostIP = "10.10.10.85";
 const port = 30002;
 
 let ur_mission_interrupted = false;

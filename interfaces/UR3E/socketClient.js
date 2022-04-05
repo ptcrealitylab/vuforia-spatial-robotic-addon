@@ -31,7 +31,7 @@ class SocketInterface{
             console.log('\x1b[95m%s\x1b[0m', 'UR3E: SOCKET CONNECTION SUCCESSFUL AT ', '\x1b[32m', hostIP, ':', port);
             this._isAlive = true;
             
-            this.steer();
+            //this.steer();
             
 
         }.bind(this));

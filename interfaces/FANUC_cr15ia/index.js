@@ -53,7 +53,7 @@ exports.enabled = settings('enabled');
 let enableFANUCconnection = true;
 let maths = null;
 
-const hostIP = "10.10.10.31";  // FANUC IP
+const hostIP = "10.10.10.100";  // FANUC IP
 const port = 59002;
 
 let objectName = 'FANUC';

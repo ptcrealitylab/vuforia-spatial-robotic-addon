@@ -54,7 +54,7 @@ exports.enabled = settings('enabled');
 exports.configurable = true;
 
 let objectName = 'MIR';
-let hostIP = '10.10.10.30';
+let hostIP = '10.10.10.5';
 //let port = 39320;
 let port = 9090;
 
@@ -80,17 +80,17 @@ if (exports.enabled) {               // These settings will be exposed to the we
          */
         exports.settings = {
             robotIp: {
-                value: settings('robotIp', '10.10.10.30'),
+                value: settings('robotIp', '10.10.10.5'),
                 type: 'text',
                 disabled: false,
-                default: '10.10.10.30',
+                default: '10.10.10.5',
                 helpText: 'The IP address of the MIR100 you want to connect to.'
             },
             robotPort: {
-                value: settings('robotPort', 39320),
+                value: settings('robotPort', 9090),
                 type: 'number',
                 disabled: false,
-                default: 39320,
+                default: 9090,
                 helpText: 'The port of the MIR100 Gateway.'
             },
             objectName: {
@@ -407,6 +407,7 @@ function computeMIRCoordinatesTo(newCheckpointX, newCheckpointY, checkpointOrien
     if (newOrientation > 180)        { newOrientation -= 360; }
     else if (newOrientation <= -180) { newOrientation += 360; }
 
+    // Mission format json
     let dataObj = {
         "mission_id": moveToCoordinateGUID,
         "parameters":[{"input_name":"positionX","value": currentPositionMIR.x},
